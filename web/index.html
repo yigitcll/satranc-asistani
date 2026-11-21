@@ -206,9 +206,11 @@
             <div class="history-actions">
               <button id="fenButton" class="text-button" data-i18n="fen">FEN</button>
               <button id="pgnButton" class="text-button" data-i18n="copyPgn">PGN kopyala</button>
+              <button id="openPgnImportButton" class="text-button" data-i18n="loadPgn">PGN yükle</button>
               <button id="undoButton" class="icon-button" title="Undo" aria-label="Undo">↶</button>
             </div>
           </div>
+          <div id="pgnReviewHint" class="history-review-hint" data-i18n="reviewHint" hidden>Konumu incelemek için bir hamleye tıkla.</div>
           <div id="moveHistory" class="move-history">
             <div class="history-empty" data-i18n="noMoves">Henüz hamle yok.</div>
           </div>
@@ -237,7 +239,20 @@
     </form>
   </dialog>
 
+  <dialog id="pgnImportDialog" class="modal">
+    <form id="pgnImportForm" method="dialog">
+      <div class="modal-heading">
+        <div><div class="section-kicker" data-i18n="loadPgn">PGN yükle</div><h2 data-i18n="pastePgn">Tamamlanmış oyunun PGN metnini yapıştır</h2></div>
+        <button id="closePgnDialog" class="icon-button" type="button" aria-label="Close">×</button>
+      </div>
+      <textarea id="pgnInput" rows="9" placeholder="[Event &quot;Casual Game&quot;]&#10;1. e4 e5 2. Nf3 Nc6 ..."></textarea>
+      <div class="modal-actions">
+        <button id="cancelPgnButton" class="button button-secondary" type="button" data-i18n="cancel">İptal</button>
+        <button id="loadPgnSubmitButton" class="button button-primary" type="submit" data-i18n="loadPgnButton">Partiyi içe aktar</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="/app.js" defer></script>
 </body>
 </html>
-

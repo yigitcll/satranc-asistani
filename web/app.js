@@ -20,12 +20,12 @@
       engineOpponent: "Stockfish analizi", you: "Sen", yourSide: "Beyaz taşlar", boardHint: "Sağ tık+sürükle: ok · sağ tık: daire · Esc: temizle.", selectedPieceMoves: "{piece} seçildi · {count} yasal hedef", capturedLabel: "Alınan taşlar: {pieces}", flipBoard: "Tahtayı çevir", clearMarks: "İşaretleri temizle", lineShown: "Devam yolu tahtada gösterildi.", whiteAdvantage: "Beyaz avantajı {score}", analyzing: "Stockfish analiz ediyor", markColors: "Shift ile kırmızı, Ctrl ile mavi ok veya daire çiz.",
       gameStatus: "OYUN DURUMU", loading: "Yükleniyor…", connecting: "Motor ve tahta hazırlanıyor.", bestMove: "EN İYİ HAMLE", stockfish: "Stockfish",
       analysisWaiting: "Analiz sonucu burada görünür", playedIt: "Bu hamleyi oynadım", alternatives: "ALTERNATİF DEVAMLAR", topLines: "En iyi 3 çizgi", noLines: "Analiz bekleniyor…",
-      enterMove: "HAMLE GİR", enterOpponent: "Rakibin hamlesini yaz veya tahtadan seç.", submitMove: "Hamleyi işle", examples: "Örnekler", moveHistory: "HAMLELER", fen: "FEN", copyPgn: "PGN kopyala", noMoves: "Henüz hamle yok.",
+      enterMove: "HAMLE GİR", enterOpponent: "Rakibin hamlesini yaz veya tahtadan seç.", submitMove: "Hamleyi işle", examples: "Örnekler", moveHistory: "HAMLELER", fen: "FEN", copyPgn: "PGN kopyala", loadPgn: "PGN yükle", noMoves: "Henüz hamle yok.",
       localEngine: "Yerel Stockfish analizi", timeDisclaimer: "Öneriler analiz süresi ve donanıma bağlıdır.", loadPosition: "KONUM YÜKLE", pasteFen: "FEN konumunu yapıştır", cancel: "İptal", loadPositionButton: "Konumu yükle",
       sideWhite: "Beyaz taşlarla oynuyorsun.", sideBlack: "Siyah taşlarla oynuyorsun.", yourTurn: "Sıra sende", opponentTurn: "Rakibin hamlesini gir", thinking: "Stockfish konumu inceliyor…", waitAnalysis: "Analiz tamamlanınca en iyi hamle burada gösterilecek.",
       recommendIntro: "Önerilen hamle", playRecommended: "Bu hamleyi oynayabilir veya kendi hamleni girebilirsin.", waitingOpponent: "Rakibin hamlesini notasyonla yazabilir ya da tahtada oynatabilirsin.", gameOver: "Oyun bitti", result: "Sonuç", check: "Şah var", checkmate: "Şah mat", stalemate: "Pat", analysis: "Analiz", depth: "Derinlik", nodes: "düğüm", nodesPlural: "düğüm", noEngine: "Stockfish bulunamadı. Proje klasöründeki stockfish klasörünü kontrol et.", engineFailed: "Stockfish başlatılamadı. Motor dosyasını veya güvenlik izinlerini kontrol et.",
       err_empty: "Bir hamle yaz veya tahtadan hamle seç.", err_missing_square: "Hamlede hedef kareyi belirt. Örnek: kale h8 veya e2-e4.", err_not_legal: "Bu hamle mevcut konumda yasal görünmüyor. Tahtadaki olası kareleri kontrol et.", err_ambiguous: "Bu tarif birden fazla hamleye uyuyor. Şunlardan birini yaz: {moves}", err_invalid_fen: "FEN konumu geçersiz ya da satranç kurallarına aykırı.", err_nothing_to_undo: "Geri alınacak hamle yok.", err_no_suggestion: "Henüz oynanabilir bir öneri yok; analiz bitince tekrar dene.", err_invalid_time: "Bu analiz süresi desteklenmiyor.", err_not_found: "İstenen işlem bulunamadı.", err_invalid_request: "İstek okunamadı. Tekrar dene.", err_unknown: "İşlem tamamlanamadı. Tekrar dene.",
-      moveAccepted: "Hamle işlendi.", fenLoaded: "Konum yüklendi.", pgnCopied: "PGN panoya kopyalandı.", pgnCopyFail: "PGN kopyalanamadı.", inputPlaceholder: "Örn. kale h8'e · a8'den h8'e · Nf3", boardLabel: "Satranç tahtası", evaluation: "Konum değerlendirmesi", moveLabel: "{piece} {from} karesinden {to} karesine", moveAria: "{square} karesine git", checkSuffix: "şah", mateScore: "Mat {n}", blackPieces: "Siyah taşlar", undoTitle: "Geri al", loadFenTitle: "FEN konumu yükle", copyPgnTitle: "Oyunu PGN olarak kopyala", closeDialog: "Kapat", languageLabel: "Dil",
+      moveAccepted: "Hamle işlendi.", fenLoaded: "Konum yüklendi.", pgnCopied: "PGN panoya kopyalandı.", pgnCopyFail: "PGN kopyalanamadı.", pgnLoaded: "Parti içe aktarıldı; hamle geçmişinden konum seçebilirsin.", loadPgnButton: "Partiyi içe aktar", pastePgn: "Tamamlanmış oyunun PGN metnini yapıştır", err_empty_pgn: "İçe aktarmak için PGN metnini yapıştır.", err_invalid_pgn: "Bu PGN okunamadı. Tamamlanmış oyunun PGN metnini kontrol et.", err_invalid_review_ply: "Bu hamle konumu açılamadı.", err_not_reviewing_pgn: "Önce bir PGN partisi yükle.", reviewHint: "Bir hamleye tıklayarak o konumu Stockfish ile incele.", reviewAfterMove: "{move} hamlesinden sonraki konumu göster", reviewingPosition: "Parti incelemesi", reviewSideToMove: "Sıradaki taraf: {side}", reviewModeCaption: "Bitmiş oyunun hamlelerini inceleyebilirsin.", inputPlaceholder: "Örn. kale h8'e · a8'den h8'e · Nf3", boardLabel: "Satranç tahtası", evaluation: "Konum değerlendirmesi", moveLabel: "{piece} {from} karesinden {to} karesine", moveAria: "{square} karesine git", checkSuffix: "şah", mateScore: "Mat {n}", blackPieces: "Siyah taşlar", undoTitle: "Geri al", loadFenTitle: "FEN konumu yükle", copyPgnTitle: "Oyunu PGN olarak kopyala", closeDialog: "Kapat", languageLabel: "Dil",
     },
     en: {
       brand: "Chess Assistant", tagline: "Read the position, understand your move, play better.", playAs: "Play as", white: "White", black: "Black", thinkTime: "Analysis",
@@ -33,12 +33,12 @@
       engineOpponent: "Stockfish analysis", you: "You", yourSide: "White pieces", boardHint: "Right-drag: arrow · right-click: circle · Esc: clear.", selectedPieceMoves: "{piece} selected · {count} legal targets", capturedLabel: "Captured pieces: {pieces}", flipBoard: "Flip board", clearMarks: "Clear marks", lineShown: "Continuation shown on the board.", whiteAdvantage: "White advantage {score}", analyzing: "Stockfish is analyzing", markColors: "Hold Shift for red or Ctrl for blue annotations.",
       gameStatus: "GAME STATUS", loading: "Loading…", connecting: "Preparing the engine and board.", bestMove: "BEST MOVE", stockfish: "Stockfish",
       analysisWaiting: "The analysis will appear here", playedIt: "I played this move", alternatives: "ALTERNATIVE LINES", topLines: "Top 3 lines", noLines: "Waiting for analysis…",
-      enterMove: "ENTER A MOVE", enterOpponent: "Type the opponent's move or play it on the board.", submitMove: "Submit move", examples: "Examples", moveHistory: "MOVES", fen: "FEN", copyPgn: "Copy PGN", noMoves: "No moves yet.",
+      enterMove: "ENTER A MOVE", enterOpponent: "Type the opponent's move or play it on the board.", submitMove: "Submit move", examples: "Examples", moveHistory: "MOVES", fen: "FEN", copyPgn: "Copy PGN", loadPgn: "Load PGN", noMoves: "No moves yet.",
       localEngine: "Local Stockfish analysis", timeDisclaimer: "Suggestions depend on analysis time and hardware.", loadPosition: "LOAD POSITION", pasteFen: "Paste a FEN position", cancel: "Cancel", loadPositionButton: "Load position",
       sideWhite: "You are playing White.", sideBlack: "You are playing Black.", yourTurn: "Your turn", opponentTurn: "Enter opponent's move", thinking: "Stockfish is analyzing the position…", waitAnalysis: "The best move will appear here when analysis finishes.",
       recommendIntro: "Recommended move", playRecommended: "Play the suggestion or enter the move you chose.", waitingOpponent: "Enter the opponent's notation or play their move on the board.", gameOver: "Game over", result: "Result", check: "Check", checkmate: "Checkmate", stalemate: "Stalemate", analysis: "Analysis", depth: "Depth", nodes: "nodes", nodesPlural: "nodes", noEngine: "Stockfish was not found. Check the stockfish folder in the project.", engineFailed: "Stockfish could not start. Check the engine file and its permissions.",
       err_empty: "Enter a move or choose one on the board.", err_missing_square: "Include the destination square. Example: rook h8 or e2-e4.", err_not_legal: "That move is not legal in this position. Check the highlighted legal squares.", err_ambiguous: "This description matches more than one move. Choose one: {moves}", err_invalid_fen: "The FEN position is invalid or violates chess rules.", err_nothing_to_undo: "There are no moves to undo.", err_no_suggestion: "There is no move suggestion yet. Try again after analysis finishes.", err_invalid_time: "This analysis time is not supported.", err_not_found: "The requested action was not found.", err_invalid_request: "The request could not be read. Try again.", err_unknown: "The action could not be completed. Try again.",
-      moveAccepted: "Move recorded.", fenLoaded: "Position loaded.", pgnCopied: "PGN copied to clipboard.", pgnCopyFail: "Could not copy the PGN.", inputPlaceholder: "e.g. rook to h8 · a8 to h8 · Nf3", boardLabel: "Chess board", evaluation: "Position evaluation", moveLabel: "{piece} from {from} to {to}", moveAria: "Move to {square}", checkSuffix: "check", mateScore: "Mate {n}", blackPieces: "Black pieces", undoTitle: "Undo", loadFenTitle: "Load FEN position", copyPgnTitle: "Copy game as PGN", closeDialog: "Close", languageLabel: "Language",
+      moveAccepted: "Move recorded.", fenLoaded: "Position loaded.", pgnCopied: "PGN copied to clipboard.", pgnCopyFail: "Could not copy the PGN.", pgnLoaded: "Game imported; click a move to review its position.", loadPgnButton: "Import game", pastePgn: "Paste the PGN text of a finished game", err_empty_pgn: "Paste PGN text to import.", err_invalid_pgn: "This PGN could not be read. Check the finished game's PGN text.", err_invalid_review_ply: "That move position could not be opened.", err_not_reviewing_pgn: "Load a PGN game first.", reviewHint: "Click a move to review that position with Stockfish.", reviewAfterMove: "Show position after {move}", reviewingPosition: "Game review", reviewSideToMove: "Side to move: {side}", reviewModeCaption: "Review the moves from the finished game.", inputPlaceholder: "e.g. rook to h8 · a8 to h8 · Nf3", boardLabel: "Chess board", evaluation: "Position evaluation", moveLabel: "{piece} from {from} to {to}", moveAria: "Move to {square}", checkSuffix: "check", mateScore: "Mate {n}", blackPieces: "Black pieces", undoTitle: "Undo", loadFenTitle: "Load FEN position", copyPgnTitle: "Copy game as PGN", closeDialog: "Close", languageLabel: "Language",
     },
     es: {
       brand: "Asistente de Ajedrez", tagline: "Entiende la posición, aprende tus jugadas y juega mejor.", playAs: "Jugar con", white: "Blancas", black: "Negras", thinkTime: "Análisis",
@@ -46,12 +46,12 @@
       engineOpponent: "Análisis de Stockfish", you: "Tú", yourSide: "Piezas blancas", blackPieces: "Piezas negras", boardHint: "Clic derecho y arrastra: flecha · clic derecho: círculo · Esc: borrar.", selectedPieceMoves: "{piece} seleccionada · {count} destinos legales", capturedLabel: "Piezas capturadas: {pieces}", flipBoard: "Girar tablero", clearMarks: "Borrar marcas", lineShown: "La continuación se muestra en el tablero.", whiteAdvantage: "Ventaja de blancas {score}", analyzing: "Stockfish está analizando", markColors: "Mayús: marcas rojas · Ctrl: marcas azules.",
       gameStatus: "ESTADO DE LA PARTIDA", loading: "Cargando…", connecting: "Preparando el motor y el tablero.", bestMove: "MEJOR JUGADA", stockfish: "Stockfish",
       analysisWaiting: "El análisis aparecerá aquí", playedIt: "Ya jugué esta jugada", alternatives: "LÍNEAS ALTERNATIVAS", topLines: "3 mejores líneas", noLines: "Esperando el análisis…",
-      enterMove: "INTRODUCIR JUGADA", enterOpponent: "Escribe la jugada rival o hazla en el tablero.", submitMove: "Procesar jugada", examples: "Ejemplos", moveHistory: "JUGADAS", fen: "FEN", copyPgn: "Copiar PGN", noMoves: "Aún no hay jugadas.",
+      enterMove: "INTRODUCIR JUGADA", enterOpponent: "Escribe la jugada rival o hazla en el tablero.", submitMove: "Procesar jugada", examples: "Ejemplos", moveHistory: "JUGADAS", fen: "FEN", copyPgn: "Copiar PGN", loadPgn: "Cargar PGN", noMoves: "Aún no hay jugadas.",
       localEngine: "Análisis local con Stockfish", timeDisclaimer: "Las sugerencias dependen del tiempo de análisis y del equipo.", loadPosition: "CARGAR POSICIÓN", pasteFen: "Pega una posición FEN", cancel: "Cancelar", loadPositionButton: "Cargar posición",
       sideWhite: "Juegas con blancas.", sideBlack: "Juegas con negras.", yourTurn: "Tu turno", opponentTurn: "Introduce la jugada rival", thinking: "Stockfish está analizando la posición…", waitAnalysis: "La mejor jugada aparecerá cuando termine el análisis.",
       recommendIntro: "Jugada recomendada", playRecommended: "Puedes jugar la sugerencia o introducir tu propia jugada.", waitingOpponent: "Escribe la notación rival o juega su movimiento en el tablero.", gameOver: "Partida terminada", result: "Resultado", check: "Jaque", checkmate: "Jaque mate", stalemate: "Ahogado", analysis: "Análisis", depth: "Profundidad", nodes: "nodos", nodesPlural: "nodos", noEngine: "No se encontró Stockfish. Comprueba la carpeta stockfish del proyecto.", engineFailed: "No se pudo iniciar Stockfish. Comprueba el archivo del motor y sus permisos.",
       err_empty: "Escribe una jugada o elígela en el tablero.", err_missing_square: "Indica la casilla de destino. Ejemplo: torre h8 o e2-e4.", err_not_legal: "Esa jugada no es legal en esta posición. Comprueba las casillas resaltadas.", err_ambiguous: "La descripción coincide con varias jugadas. Elige una: {moves}", err_invalid_fen: "La posición FEN no es válida o incumple las reglas.", err_nothing_to_undo: "No hay jugadas que deshacer.", err_no_suggestion: "Aún no hay una sugerencia. Vuelve a intentarlo cuando termine el análisis.", err_invalid_time: "Ese tiempo de análisis no está disponible.", err_not_found: "No se encontró la operación solicitada.", err_invalid_request: "No se pudo leer la solicitud. Inténtalo de nuevo.", err_unknown: "No se pudo completar la operación. Inténtalo de nuevo.",
-      moveAccepted: "Jugada registrada.", fenLoaded: "Posición cargada.", pgnCopied: "PGN copiado.", pgnCopyFail: "No se pudo copiar el PGN.", inputPlaceholder: "p. ej., torre a h8 · de a8 a h8 · caballo a f3", boardLabel: "Tablero de ajedrez", evaluation: "Evaluación de la posición", moveLabel: "{piece} de {from} a {to}", moveAria: "Mover a {square}", checkSuffix: "jaque", mateScore: "Mate {n}", undoTitle: "Deshacer", loadFenTitle: "Cargar posición FEN", copyPgnTitle: "Copiar partida como PGN", closeDialog: "Cerrar", languageLabel: "Idioma",
+      moveAccepted: "Jugada registrada.", fenLoaded: "Posición cargada.", pgnCopied: "PGN copiado.", pgnCopyFail: "No se pudo copiar el PGN.", pgnLoaded: "Partida importada; haz clic en una jugada para revisar esa posición.", loadPgnButton: "Importar partida", pastePgn: "Pega el PGN de una partida terminada", err_empty_pgn: "Pega el texto PGN que quieras importar.", err_invalid_pgn: "No se pudo leer este PGN. Comprueba el texto de la partida terminada.", err_invalid_review_ply: "No se pudo abrir esa posición de la partida.", err_not_reviewing_pgn: "Primero carga una partida PGN.", reviewHint: "Haz clic en una jugada para analizar esa posición con Stockfish.", reviewAfterMove: "Mostrar la posición después de {move}", reviewingPosition: "Análisis de la partida", reviewSideToMove: "Turno de: {side}", reviewModeCaption: "Revisa las jugadas de la partida terminada.", inputPlaceholder: "p. ej., torre a h8 · de a8 a h8 · caballo a f3", boardLabel: "Tablero de ajedrez", evaluation: "Evaluación de la posición", moveLabel: "{piece} de {from} a {to}", moveAria: "Mover a {square}", checkSuffix: "jaque", mateScore: "Mate {n}", undoTitle: "Deshacer", loadFenTitle: "Cargar posición FEN", copyPgnTitle: "Copiar partida como PGN", closeDialog: "Cerrar", languageLabel: "Idioma",
     },
     ru: {
       brand: "Шахматный помощник", tagline: "Понимай позицию, разбирай ходы и играй сильнее.", playAs: "Играть за", white: "Белых", black: "Чёрных", thinkTime: "Анализ",
@@ -59,12 +59,12 @@
       engineOpponent: "Анализ Stockfish", you: "Вы", yourSide: "Белые фигуры", blackPieces: "Чёрные фигуры", boardHint: "Правая кнопка и перетаскивание: стрелка · щелчок: круг · Esc: очистить.", selectedPieceMoves: "Выбрана фигура «{piece}» · допустимых ходов: {count}", capturedLabel: "Взятые фигуры: {pieces}", flipBoard: "Перевернуть доску", clearMarks: "Убрать пометки", lineShown: "Продолжение показано стрелками на доске.", whiteAdvantage: "Преимущество белых {score}", analyzing: "Stockfish анализирует позицию", markColors: "Shift — красные пометки · Ctrl — синие.",
       gameStatus: "СОСТОЯНИЕ ПАРТИИ", loading: "Загрузка…", connecting: "Подготовка движка и доски.", bestMove: "ЛУЧШИЙ ХОД", stockfish: "Stockfish",
       analysisWaiting: "Здесь появится результат анализа", playedIt: "Я сделал этот ход", alternatives: "АЛЬТЕРНАТИВНЫЕ ПРОДОЛЖЕНИЯ", topLines: "Лучшие 3 варианта", noLines: "Ожидание анализа…",
-      enterMove: "ВВЕСТИ ХОД", enterOpponent: "Введите ход соперника или сделайте его на доске.", submitMove: "Применить ход", examples: "Примеры", moveHistory: "ХОДЫ", fen: "FEN", copyPgn: "Копировать PGN", noMoves: "Ходов пока нет.",
+      enterMove: "ВВЕСТИ ХОД", enterOpponent: "Введите ход соперника или сделайте его на доске.", submitMove: "Применить ход", examples: "Примеры", moveHistory: "ХОДЫ", fen: "FEN", copyPgn: "Копировать PGN", loadPgn: "Загрузить PGN", noMoves: "Ходов пока нет.",
       localEngine: "Локальный анализ Stockfish", timeDisclaimer: "Подсказки зависят от времени анализа и мощности компьютера.", loadPosition: "ЗАГРУЗИТЬ ПОЗИЦИЮ", pasteFen: "Вставьте позицию FEN", cancel: "Отмена", loadPositionButton: "Загрузить позицию",
       sideWhite: "Вы играете белыми.", sideBlack: "Вы играете чёрными.", yourTurn: "Ваш ход", opponentTurn: "Введите ход соперника", thinking: "Stockfish анализирует позицию…", waitAnalysis: "Лучший ход появится после завершения анализа.",
       recommendIntro: "Рекомендуемый ход", playRecommended: "Сделайте рекомендованный ход или введите свой.", waitingOpponent: "Введите запись хода соперника или сделайте ход на доске.", gameOver: "Партия завершена", result: "Результат", check: "Шах", checkmate: "Мат", stalemate: "Пат", analysis: "Анализ", depth: "Глубина", nodes: "узлов", nodesPlural: "узлов", noEngine: "Stockfish не найден. Проверьте папку stockfish в проекте.", engineFailed: "Не удалось запустить Stockfish. Проверьте файл движка и разрешения.",
       err_empty: "Введите ход или выберите его на доске.", err_missing_square: "Укажите поле назначения. Например: ладья h8 или e2-e4.", err_not_legal: "Этот ход недопустим в текущей позиции. Проверьте подсвеченные поля.", err_ambiguous: "Описание подходит к нескольким ходам. Выберите один: {moves}", err_invalid_fen: "Позиция FEN некорректна или нарушает правила.", err_nothing_to_undo: "Нет ходов для отмены.", err_no_suggestion: "Подсказки пока нет. Попробуйте снова после анализа.", err_invalid_time: "Такое время анализа не поддерживается.", err_not_found: "Запрошенная операция не найдена.", err_invalid_request: "Не удалось прочитать запрос. Попробуйте ещё раз.", err_unknown: "Не удалось выполнить действие. Попробуйте ещё раз.",
-      moveAccepted: "Ход записан.", fenLoaded: "Позиция загружена.", pgnCopied: "PGN скопирован.", pgnCopyFail: "Не удалось скопировать PGN.", inputPlaceholder: "Например: ладья на h8 · с a8 на h8 · конь на f3", boardLabel: "Шахматная доска", evaluation: "Оценка позиции", moveLabel: "{piece}: с {from} на {to}", moveAria: "Ход на {square}", checkSuffix: "шах", mateScore: "Мат {n}", undoTitle: "Отменить ход", loadFenTitle: "Загрузить позицию FEN", copyPgnTitle: "Скопировать партию в PGN", closeDialog: "Закрыть", languageLabel: "Язык",
+      moveAccepted: "Ход записан.", fenLoaded: "Позиция загружена.", pgnCopied: "PGN скопирован.", pgnCopyFail: "Не удалось скопировать PGN.", pgnLoaded: "Партия загружена; нажмите на ход, чтобы изучить позицию.", loadPgnButton: "Импортировать партию", pastePgn: "Вставьте PGN завершённой партии", err_empty_pgn: "Вставьте текст PGN для импорта.", err_invalid_pgn: "Не удалось прочитать этот PGN. Проверьте текст завершённой партии.", err_invalid_review_ply: "Не удалось открыть эту позицию партии.", err_not_reviewing_pgn: "Сначала загрузите PGN партии.", reviewHint: "Нажмите на ход, чтобы изучить позицию с Stockfish.", reviewAfterMove: "Показать позицию после {move}", reviewingPosition: "Анализ партии", reviewSideToMove: "Ход за: {side}", reviewModeCaption: "Просматривайте ходы завершённой партии.", inputPlaceholder: "Например: ладья на h8 · с a8 на h8 · конь на f3", boardLabel: "Шахматная доска", evaluation: "Оценка позиции", moveLabel: "{piece}: с {from} на {to}", moveAria: "Ход на {square}", checkSuffix: "шах", mateScore: "Мат {n}", undoTitle: "Отменить ход", loadFenTitle: "Загрузить позицию FEN", copyPgnTitle: "Скопировать партию в PGN", closeDialog: "Закрыть", languageLabel: "Язык",
     },
   };
 
@@ -209,7 +209,9 @@
     $("undoButton").setAttribute("aria-label", $("undoButton").title);
     $("fenButton").title = t("loadFenTitle");
     $("pgnButton").title = t("copyPgnTitle");
+    $("openPgnImportButton").title = t("pastePgn");
     $("closeFenDialog").setAttribute("aria-label", t("closeDialog"));
+    $("closePgnDialog").setAttribute("aria-label", t("closeDialog"));
     $("sideSelect").setAttribute("aria-label", t("playAs"));
     $("timeSelect").setAttribute("aria-label", t("thinkTime"));
     $("clearMarksButton").title = t("clearMarks");
@@ -339,11 +341,18 @@
   function renderHistory() {
     const rows = state.moveHistory || [];
     const root = $("moveHistory");
+    $("pgnReviewHint").hidden = !state.pgnReview;
     if (!rows.length) {
       root.innerHTML = `<div class="history-empty">${escapeHtml(t("noMoves"))}</div>`;
       return;
     }
-    root.innerHTML = rows.map((row) => `<div class="history-row"><span class="history-number">${row.number}.</span><span class="history-move">${escapeHtml(row.white || "…")}</span><span class="history-move">${escapeHtml(row.black || "")}</span></div>`).join("");
+    const moveCell = (san, ply) => {
+      if (!san) return `<span class="history-move"></span>`;
+      if (!state.pgnReview || ply == null) return `<span class="history-move">${escapeHtml(san)}</span>`;
+      const current = state.reviewPly === ply;
+      return `<button class="history-move history-review-move${current ? " is-current" : ""}" type="button" data-ply="${ply}" aria-pressed="${current}" aria-label="${escapeHtml(t("reviewAfterMove", { move: san }))}">${escapeHtml(san)}</button>`;
+    };
+    root.innerHTML = rows.map((row) => `<div class="history-row"><span class="history-number">${row.number}.</span>${moveCell(row.white, row.whitePly)}${moveCell(row.black, row.blackPly)}</div>`).join("");
     root.scrollTop = root.scrollHeight;
   }
 
@@ -362,8 +371,9 @@
     setText("bestScore", scoreText);
     setText("depthDetail", state.thinking ? t("thinking") : reco ? `${t("depth")} ${reco.depth || "—"}${reco.seldepth ? ` / ${reco.seldepth}` : ""}` : state.analysisError ? t(state.analysisError === "engine_missing" ? "noEngine" : "engineFailed") : t("analysisWaiting"));
     setText("nodesDetail", reco?.nodes ? `${Number(reco.nodes).toLocaleString(({ tr: "tr-TR", en: "en-US", es: "es-ES", ru: "ru-RU" })[lang])} ${t("nodes")}` : "");
-    $("playSuggestionButton").disabled = busy || state.thinking || !reco || state.turn !== state.humanColor || state.gameOver;
-    const whiteScore = score == null ? null : score * (state.humanColor === "white" ? 1 : -1);
+    $("playSuggestionButton").disabled = busy || state.pgnReview || state.thinking || !reco || state.turn !== state.humanColor || state.gameOver;
+    const scorePerspective = reco?.scorePov || state.humanColor;
+    const whiteScore = score == null ? null : score * (scorePerspective === "white" ? 1 : -1);
     const whitePercent = whiteScore == null ? 50 : Math.max(5, Math.min(95, 50 + 40 * Math.tanh(whiteScore / 500)));
     const evaluationColumn = $("evaluationColumn");
     const evaluationTrack = $("evaluationTrack");
@@ -371,7 +381,7 @@
     $("evaluationFill").style.height = `${whitePercent}%`;
     setText("evaluationLabel", reco?.mate != null ? t("mateScore", { n: reco.mate }) : score == null ? "—" : scoreText);
     evaluationTrack.setAttribute("aria-valuenow", String(Math.round(whitePercent)));
-    const whiteMate = reco?.mate == null ? null : reco.mate * (state.humanColor === "white" ? 1 : -1);
+    const whiteMate = reco?.mate == null ? null : reco.mate * (scorePerspective === "white" ? 1 : -1);
     const whiteScoreText = whiteMate != null
       ? t("mateScore", { n: whiteMate })
       : whiteScore == null ? "—" : `${whiteScore >= 0 ? "+" : ""}${(whiteScore / 100).toFixed(2)}`;
@@ -385,7 +395,7 @@
   }
 
   function renderStatus() {
-    const myTurn = state.turn === state.humanColor;
+    const myTurn = state.pgnReview || state.turn === state.humanColor;
     const sideCaption = state.humanColor === "white" ? t("yourSide") : t("blackPieces");
     setText("humanCaption", sideCaption);
     setText("opponentName", "Stockfish");
@@ -394,10 +404,13 @@
     $("opponentAvatar")?.setAttribute("aria-hidden", "true");
     renderCapturedPieces();
     const captionEl = $("inputPrompt");
-    captionEl.textContent = state.gameOver ? `${t("result")}: ${state.result}` : myTurn ? t("playRecommended") : t("waitingOpponent");
+    captionEl.textContent = state.gameOver ? `${t("result")}: ${state.result}` : state.pgnReview ? t("reviewModeCaption") : myTurn ? t("playRecommended") : t("waitingOpponent");
     if (state.gameOver) {
       setText("turnTitle", `${t("gameOver")} · ${state.result}`);
       setText("turnDescription", state.termination === "checkmate" ? t("checkmate") : state.termination === "stalemate" ? t("stalemate") : t("result"));
+    } else if (state.pgnReview) {
+      setText("turnTitle", t("reviewingPosition"));
+      setText("turnDescription", t("reviewSideToMove", { side: sideName(state.turn) }));
     } else if (state.thinking) {
       setText("turnTitle", t("thinking"));
       setText("turnDescription", `${sideName(state.humanColor)} · ${t("waitAnalysis")}`);
@@ -421,7 +434,7 @@
     const changedPosition = state?.fen !== nextState.fen;
     const firstRender = state === null;
     const boardChanged = firstRender || sideChanged || changedPosition || state.lastMove !== nextState.lastMove;
-    if (firstRender || sideChanged) flipped = nextState.humanColor === "black";
+    if (firstRender || (sideChanged && !nextState.pgnReview)) flipped = nextState.humanColor === "black";
     state = nextState;
     if (changedPosition) { selected = null; clearAnnotations(); }
     if (boardChanged) renderBoard();
@@ -450,7 +463,7 @@
     renderStatus();
     try {
       const next = await request(path, body);
-      if (path === "/api/new" || path === "/api/fen") clearAnnotations();
+      if (path === "/api/new" || path === "/api/fen" || path === "/api/pgn" || path === "/api/review/ply") clearAnnotations();
       render(next);
       if (successMessage) showToast(t(successMessage), true);
       return next;
@@ -631,8 +644,23 @@
       showToast(t("pgnCopied"), true);
     } catch { showToast(t("pgnCopyFail")); }
   });
+  $("openPgnImportButton").addEventListener("click", () => {
+    $("pgnInput").value = "";
+    $("pgnImportDialog").showModal();
+    $("pgnInput").focus();
+  });
+  $("closePgnDialog").addEventListener("click", () => $("pgnImportDialog").close());
+  $("cancelPgnButton").addEventListener("click", () => $("pgnImportDialog").close());
+  $("pgnImportForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const next = await act("/api/pgn", { pgn: $("pgnInput").value }, "pgnLoaded");
+    if (next) $("pgnImportDialog").close();
+  });
+  $("moveHistory").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-ply]");
+    if (button && state?.pgnReview) act("/api/review/ply", { ply: Number(button.dataset.ply) }, "");
+  });
 
   applyLanguage();
   sync();
 })();
-

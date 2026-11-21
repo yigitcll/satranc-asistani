@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import io
 import os
 import re
 import subprocess
@@ -249,6 +250,9 @@ class GameSession:
         self.thinking = False
         self.revision = 0
         self.request_id = 0
+        self.imported_headers: dict[str, str] = {}
+        self.imported_game: chess.pgn.Game | None = None
+        self.review_ply = 0
 
     def _clear_analysis_locked(self) -> None:
         self.pending_move = None
@@ -260,6 +264,9 @@ class GameSession:
         with self.lock:
             self.human_color = chess.WHITE if side == "white" else chess.BLACK
             self.board = chess.Board()
+            self.imported_headers = {}
+            self.imported_game = None
+            self.review_ply = 0
             self.revision += 1
             self.request_id += 1
             self._clear_analysis_locked()
@@ -286,12 +293,20 @@ class GameSession:
 
     def undo(self) -> tuple[dict | None, str | None]:
         with self.lock:
-            if not self.board.move_stack:
-                return None, "nothing_to_undo"
-            self.board.pop()
-            self.revision += 1
-            self.request_id += 1
-            self._clear_analysis_locked()
+            if self.imported_game is not None:
+                review_ply = self.review_ply - 1
+                if review_ply < 0:
+                    return None, "nothing_to_undo"
+            else:
+                if not self.board.move_stack:
+                    return None, "nothing_to_undo"
+                self.board.pop()
+                self.revision += 1
+                self.request_id += 1
+                self._clear_analysis_locked()
+                review_ply = None
+        if review_ply is not None:
+            return self.set_review_ply(review_ply)
         self.schedule_analysis()
         return self.state(), None
 
@@ -304,6 +319,53 @@ class GameSession:
             return None, "invalid_fen"
         with self.lock:
             self.board = new_board
+            self.imported_headers = {}
+            self.imported_game = None
+            self.review_ply = 0
+            self.revision += 1
+            self.request_id += 1
+            self._clear_analysis_locked()
+        self.schedule_analysis()
+        return self.state(), None
+
+    def load_pgn(self, pgn_text: str) -> tuple[dict | None, str | None]:
+        if not pgn_text.strip():
+            return None, "empty_pgn"
+        try:
+            game = chess.pgn.read_game(io.StringIO(pgn_text))
+            if game is None or game.errors:
+                return None, "invalid_pgn"
+            new_board = game.end().board()
+        except (ValueError, UnicodeError):
+            return None, "invalid_pgn"
+        if not new_board.is_valid() or not new_board.move_stack:
+            return None, "invalid_pgn"
+
+        with self.lock:
+            self.board = new_board
+            self.human_color = game.board().turn
+            self.imported_headers = dict(game.headers)
+            self.imported_game = game
+            self.review_ply = len(new_board.move_stack)
+            self.revision += 1
+            self.request_id += 1
+            self._clear_analysis_locked()
+        self.schedule_analysis()
+        return self.state(), None
+
+    def set_review_ply(self, ply: int) -> tuple[dict | None, str | None]:
+        with self.lock:
+            game = self.imported_game
+            if game is None:
+                return None, "not_reviewing_pgn"
+            moves = list(game.mainline_moves())
+            if ply < 0 or ply > len(moves):
+                return None, "invalid_review_ply"
+            board = game.board()
+            for move in moves[:ply]:
+                board.push(move)
+            self.board = board
+            self.review_ply = ply
             self.revision += 1
             self.request_id += 1
             self._clear_analysis_locked()
@@ -321,6 +383,9 @@ class GameSession:
         return self.state(), None
 
     def _push_locked(self, move: chess.Move) -> None:
+        self.imported_game = None
+        self.imported_headers = {}
+        self.review_ply = 0
         self.board.push(move)
         self.revision += 1
         self.request_id += 1
@@ -328,7 +393,7 @@ class GameSession:
 
     def schedule_analysis(self) -> None:
         with self.lock:
-            if self.board.is_game_over(claim_draw=True) or self.board.turn != self.human_color:
+            if self.board.is_game_over(claim_draw=True) or (self.imported_game is None and self.board.turn != self.human_color):
                 return
             if not self.engine_path:
                 self.analysis_error = "engine_missing"
@@ -337,6 +402,7 @@ class GameSession:
             request_id = self.request_id
             revision = self.revision
             board_snapshot = self.board.copy(stack=True)
+            score_pov = board_snapshot.turn if self.imported_game is not None else self.human_color
             seconds = self.analysis_seconds
             self.pending_move = None
             self.analysis_lines = []
@@ -344,12 +410,12 @@ class GameSession:
             self.thinking = True
         threading.Thread(
             target=self._analyze,
-            args=(request_id, revision, board_snapshot, seconds),
+            args=(request_id, revision, board_snapshot, seconds, score_pov),
             name="stockfish-analysis",
             daemon=True,
         ).start()
 
-    def _analyze(self, request_id: int, revision: int, board: chess.Board, seconds: int) -> None:
+    def _analyze(self, request_id: int, revision: int, board: chess.Board, seconds: int, score_pov: chess.Color) -> None:
         try:
             with self.engine_lock:
                 if not Path(self.engine_path).is_file():
@@ -402,15 +468,14 @@ class GameSession:
             if not sequence:
                 continue
             score = info.get("score")
-            with self.lock:
-                pov = self.human_color
-            relative = score.pov(pov) if score else None
+            relative = score.pov(score_pov) if score else None
             mate = relative.mate() if relative else None
             cp = relative.score(mate_score=100000) if relative else None
             lines.append({
                 "uci": sequence[0]["uci"],
                 "san": sequence[0]["san"],
                 "scoreCp": cp,
+                "scorePov": "white" if score_pov == chess.WHITE else "black",
                 "mate": mate,
                 "depth": info.get("depth"),
                 "seldepth": info.get("seldepth"),
@@ -436,6 +501,8 @@ class GameSession:
                 "legalMoves": [move.uci() for move in self.board.legal_moves],
                 "lastMove": self.board.peek().uci() if self.board.move_stack else None,
                 "moveHistory": self._move_history_locked(),
+                "pgnReview": self.imported_game is not None,
+                "reviewPly": self.review_ply,
                 "capturedPieces": self._captured_pieces_locked(),
                 "inCheck": self.board.is_check(),
                 "thinking": self.thinking,
@@ -469,6 +536,20 @@ class GameSession:
     def _move_history_locked(self) -> list[dict]:
         cursor = self.board.root()
         history: list[dict] = []
+        if self.imported_game is not None:
+            cursor = self.imported_game.board()
+            for ply, move in enumerate(self.imported_game.mainline_moves(), start=1):
+                san = cursor.san(move)
+                number = cursor.fullmove_number
+                key = "white" if cursor.turn == chess.WHITE else "black"
+                row = history[-1] if key == "black" and history and history[-1]["number"] == number else None
+                if row is None:
+                    row = {"number": number, "white": "", "black": "", "whitePly": None, "blackPly": None}
+                    history.append(row)
+                row[key] = san
+                row[f"{key}Ply"] = ply
+                cursor.push(move)
+            return history
         for move in self.board.move_stack:
             san = cursor.san(move)
             number = cursor.fullmove_number
@@ -483,10 +564,17 @@ class GameSession:
 
     def pgn(self) -> str:
         with self.lock:
+            if self.imported_game is not None:
+                return self.imported_game.accept(chess.pgn.StringExporter(headers=True, variations=False, comments=False))
             game = chess.pgn.Game.from_board(self.board)
-            game.headers["Event"] = "Chess Assistant"
-            game.headers["White"] = "White" if self.human_color == chess.WHITE else "Opponent"
-            game.headers["Black"] = "Opponent" if self.human_color == chess.WHITE else "Black"
+            if self.imported_headers:
+                for key, value in self.imported_headers.items():
+                    if key not in ("SetUp", "FEN", "Result"):
+                        game.headers[key] = value
+            else:
+                game.headers["Event"] = "Chess Assistant"
+                game.headers["White"] = "White" if self.human_color == chess.WHITE else "Opponent"
+                game.headers["Black"] = "Opponent" if self.human_color == chess.WHITE else "Black"
             return game.accept(chess.pgn.StringExporter(headers=True, variations=False, comments=False))
 
     def close_engine(self) -> None:
@@ -595,8 +683,26 @@ class RequestHandler(BaseHTTPRequestHandler):
             else:
                 self._send_json(200, state or GAME.state())
             return
+        if path == "/api/review/ply":
+            try:
+                ply = int(body.get("ply", -1))
+            except (TypeError, ValueError):
+                ply = -1
+            state, error = GAME.set_review_ply(ply)
+            if error:
+                self._send_json(422, {"error": error})
+            else:
+                self._send_json(200, state or GAME.state())
+            return
         if path == "/api/fen":
             state, error = GAME.load_fen(str(body.get("fen", "")))
+            if error:
+                self._send_json(422, {"error": error})
+            else:
+                self._send_json(200, state or GAME.state())
+            return
+        if path == "/api/pgn":
+            state, error = GAME.load_pgn(str(body.get("pgn", "")))
             if error:
                 self._send_json(422, {"error": error})
             else:
@@ -662,4 +768,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

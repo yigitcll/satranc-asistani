@@ -13,6 +13,7 @@ Dört dilli arayüze sahip, Stockfish motoruyla çalışan bir satranç uygulama
 - `kale h8`, `at f3`, `e2 e4`, `rook to h8` ve `Nf3` gibi hamle girişleri
 - `torre a h8`, `enroque corto`, `ладья на h8` ve `короткая рокировка` gibi İspanyolca/Rusça hamle tarifleri
 - Stockfish ile hamle önerisi ve analiz
+- Bitmiş oyunların PGN metnini içe aktarma, hamle geçmişinden konum seçme ve her konumu Stockfish ile inceleme
 - Alınan taşlar, şah uyarısı ve tahtayı çevirme
 - Windows'ta tarayıcı araç çubukları olmadan uygulama penceresinde açılma
 
@@ -25,6 +26,15 @@ Dört dilli arayüze sahip, Stockfish motoruyla çalışan bir satranç uygulama
 5. Uygulamayı açmak için `start.bat` dosyasını çalıştırın. Uygulama penceresi otomatik açılır.
 
 Kurulum internet bağlantısı gerektirir. `start.bat` uygulamayı `http://127.0.0.1:8765` adresinde yerel olarak çalıştırır.
+
+## Bitmiş bir oyunu inceleme
+
+1. Oyun tamamlandıktan sonra satranç sitesinden PGN metnini kopyala.
+2. Uygulamada **PGN yükle** düğmesine basıp metni yapıştır ve içe aktar.
+3. Hamle geçmişindeki bir hamleye tıkla. Tahta o hamleden sonraki konuma gider ve Stockfish o konumu analiz eder.
+4. Geri al düğmesiyle önceki konumlara ilerle. PGN kopyala düğmesi içe aktarılan partiyi dışa aktarır.
+
+Uygulama bitmiş oyunları incelemek içindir; canlı Chess.com oyununa bağlanmaz veya oyun sürerken hamle önerisi vermez.
 
 ## Hamle yazma örnekleri
 
@@ -47,4 +57,3 @@ Birden fazla aynı tür taş hedef kareye gidebiliyorsa uygulama kaynak kareyi s
 ## Lisans
 
 Bu proje **GNU GPL-3.0-or-later** lisansıyla sunulur. Ayrıntılar için [`LICENSE`](LICENSE) dosyasına bakın. Üçüncü taraf bileşen bildirimleri [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) dosyasındadır.
-

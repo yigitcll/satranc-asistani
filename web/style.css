@@ -214,6 +214,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .history-row:nth-child(odd) { background: rgba(255,255,255,.025); }
 .history-number { color: var(--subtle); font: 10px ui-monospace, Consolas, monospace; }
 .history-move { color: #d7dfd7; }
+.history-review-hint { margin: -3px 0 8px 34px; color: var(--muted); font-size: 9px; }
+.history-review-move { width: 100%; border: 0; border-radius: 5px; padding: 2px 4px; background: transparent; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+.history-review-move:hover, .history-review-move.is-current { background: rgba(154,215,170,.12); color: var(--mint-strong); }
+.history-review-move:focus-visible { outline: 1px solid var(--mint); }
 .history-empty { padding: 8px 3px; color: var(--muted); font-size: 10px; }
 .app-footer { display: flex; justify-content: center; gap: 8px; padding: 22px 0 0; color: #718075; font-size: 9px; }
 .footer-separator { color: #47554b; }
@@ -494,4 +498,3 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .board-tools { width: 100%; }
   .board-hint { max-width: 100%; }
 }
-
