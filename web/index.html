@@ -106,13 +106,17 @@
         </div>
 
         <div class="board-and-eval">
-          <div class="evaluation-column" aria-label="Position evaluation">
-            <div class="evaluation-track">
+          <div id="evaluationColumn" class="evaluation-column" aria-label="Position evaluation">
+            <div id="evaluationTrack" class="evaluation-track" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="—">
               <div id="evaluationFill" class="evaluation-fill"></div>
+              <div class="evaluation-center" aria-hidden="true"></div>
             </div>
             <div id="evaluationLabel" class="evaluation-label">—</div>
           </div>
-          <div id="board" class="chessboard" role="grid" aria-label="Chess board"></div>
+          <div class="board-surface">
+            <div id="board" class="chessboard" role="grid" aria-label="Chess board"></div>
+            <svg id="boardAnnotations" class="board-annotations" viewBox="0 0 8 8" preserveAspectRatio="none" aria-hidden="true"></svg>
+          </div>
         </div>
 
         <div class="board-player player-bottom">
@@ -126,7 +130,10 @@
 
         <div class="board-footer">
           <div class="board-hint"><span class="hint-dot"></span><span id="boardHintText" data-i18n="boardHint">Taşa tıkla; yasal kareler gösterilsin.</span></div>
-          <button id="flipBoardButton" class="text-button" data-i18n="flipBoard">Tahtayı çevir</button>
+          <div class="board-tools">
+            <button id="clearMarksButton" class="text-button" data-i18n="clearMarks" hidden>İşaretleri temizle</button>
+            <button id="flipBoardButton" class="text-button" data-i18n="flipBoard">Tahtayı çevir</button>
+          </div>
         </div>
       </section>
 
@@ -153,6 +160,7 @@
             <span id="depthDetail" data-i18n="analysisWaiting">Analiz sonucu burada görünür</span>
             <span id="nodesDetail"></span>
           </div>
+          <div id="analysisProgress" class="analysis-progress" role="progressbar" aria-label="Engine analysis progress" hidden><span></span></div>
           <button id="playSuggestionButton" class="button button-primary play-suggestion" disabled>
             <span aria-hidden="true">✓</span><span data-i18n="playedIt">Bu hamleyi oynadım</span>
           </button>

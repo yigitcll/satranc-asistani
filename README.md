@@ -6,6 +6,9 @@ Türkçe ve İngilizce arayüze sahip, Stockfish motoruyla çalışan bir satran
 
 - Lichess tarzı açık-koyu kareli tahta ve çizimli SVG taşlar
 - Taşa tıklayınca veya sürükleyince yasal hedef karelerin gösterilmesi
+- Sağ tıkla sürükleyerek ok, sağ tıkla kareyi daire içine alma; Shift/Ctrl ile renk seçimi
+- Alternatif Stockfish devamına tıklayarak ilk hamleleri tahtada oklarla görme
+- Tahta yönüne uyum sağlayan beyaz/siyah değerlendirme çubuğu ve canlı analiz göstergesi
 - Türkçe ve İngilizce arayüz
 - `kale h8`, `at f3`, `e2 e4`, `rook to h8` ve `Nf3` gibi hamle girişleri
 - Stockfish ile hamle önerisi ve analiz

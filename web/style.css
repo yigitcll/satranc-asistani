@@ -396,3 +396,102 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .main-layout { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* Board tools, annotations, and a readable side-to-move evaluation rail. */
+.board-and-eval { grid-template-columns: 44px minmax(0, 1fr); gap: 9px; }
+.board-surface { position: relative; width: 100%; min-width: 0; aspect-ratio: 1; }
+.chessboard { width: 100%; height: auto; aspect-ratio: 1; }
+.board-annotations {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.evaluation-column { width: 44px; min-width: 0; align-items: center; gap: 7px; }
+.evaluation-track {
+  position: relative;
+  flex: 1 1 auto;
+  width: 20px;
+  min-height: 160px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #242820, #191d18);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.18);
+}
+.evaluation-fill {
+  z-index: 1;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #fffef7, #dedfce);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.3);
+}
+.evaluation-column.is-flipped .evaluation-fill { top: 0; bottom: auto; }
+.evaluation-center {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(193, 199, 181, .48);
+  pointer-events: none;
+}
+.evaluation-label {
+  min-width: 40px;
+  min-height: 20px;
+  padding: 4px 5px;
+  border: 1px solid rgba(162,196,90,.22);
+  border-radius: 7px;
+  color: #dbe7c3;
+  background: #242a20;
+  text-align: center;
+  font: 700 10px/1.1 ui-monospace, Consolas, monospace;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+  transform: none;
+}
+.board-tools { display: flex; align-items: center; justify-content: flex-end; gap: 13px; flex: 0 0 auto; }
+.board-tools .text-button { white-space: nowrap; }
+.analysis-progress {
+  position: relative;
+  height: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(162,196,90,.13);
+}
+.analysis-progress[hidden] { display: none; }
+.analysis-progress span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 34%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, #a2c45a, #d8ec9d, transparent);
+  animation: analysis-sweep 1.45s ease-in-out infinite;
+}
+.variation-row[aria-pressed="true"] { border-color: rgba(98,168,255,.42); background: rgba(98,168,255,.08); }
+@keyframes analysis-sweep {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(310%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .analysis-progress span { width: 100%; animation: none; opacity: .55; }
+  .evaluation-fill { transition-duration: .01ms; }
+}
+@media (max-width: 760px) {
+  .board-and-eval { grid-template-columns: 39px minmax(0, 1fr); gap: 7px; }
+  .evaluation-column { width: 39px; }
+  .board-annotations { z-index: 4; }
+}
+@media (max-width: 460px) {
+  .board-and-eval { grid-template-columns: 34px minmax(0, 1fr); gap: 6px; }
+  .evaluation-column { width: 34px; }
+  .evaluation-track { width: 16px; }
+  .evaluation-label { min-width: 32px; padding: 4px 2px; font-size: 9px; }
+  .board-footer { flex-wrap: wrap; }
+  .board-tools { width: 100%; }
+  .board-hint { max-width: 100%; }
+}
+

@@ -9,7 +9,7 @@
     tr: {
       brand: "Satranç Asistanı", tagline: "Konumunu gör, hamleni anla, daha iyi oyna.", playAs: "Rengim", white: "Beyaz", black: "Siyah", thinkTime: "Analiz",
       fast: "Hızlı · 1 sn", balanced: "Dengeli · 2 sn", strong: "Güçlü · 5 sn", deep: "Derin · 10 sn", newGame: "Yeni oyun", downloadStockfish: "Stockfish indir",
-      engineOpponent: "Stockfish analizi", you: "Sen", yourSide: "Beyaz taşlar", boardHint: "Taşa tıkla veya sürükle; yasal kareler gösterilsin.", selectedPieceMoves: "{piece} seçildi · {count} yasal hedef", capturedLabel: "Alınan taşlar: {pieces}", flipBoard: "Tahtayı çevir",
+      engineOpponent: "Stockfish analizi", you: "Sen", yourSide: "Beyaz taşlar", boardHint: "Sağ tık+sürükle: ok · sağ tık: daire · Esc: temizle.", selectedPieceMoves: "{piece} seçildi · {count} yasal hedef", capturedLabel: "Alınan taşlar: {pieces}", flipBoard: "Tahtayı çevir", clearMarks: "İşaretleri temizle", lineShown: "Devam yolu tahtada gösterildi.", whiteAdvantage: "Beyaz avantajı {score}", analyzing: "Stockfish analiz ediyor", markColors: "Shift ile kırmızı, Ctrl ile mavi ok veya daire çiz.",
       gameStatus: "OYUN DURUMU", loading: "Yükleniyor…", connecting: "Motor ve tahta hazırlanıyor.", bestMove: "EN İYİ HAMLE", stockfish: "Stockfish",
       analysisWaiting: "Analiz sonucu burada görünür", playedIt: "Bu hamleyi oynadım", alternatives: "ALTERNATİF DEVAMLAR", topLines: "En iyi 3 çizgi", noLines: "Analiz bekleniyor…",
       enterMove: "HAMLE GİR", enterOpponent: "Rakibin hamlesini yaz veya tahtadan seç.", submitMove: "Hamleyi işle", examples: "Örnekler", moveHistory: "HAMLELER", fen: "FEN", copyPgn: "PGN kopyala", noMoves: "Henüz hamle yok.",
@@ -22,7 +22,7 @@
     en: {
       brand: "Chess Assistant", tagline: "Read the position, understand your move, play better.", playAs: "Play as", white: "White", black: "Black", thinkTime: "Analysis",
       fast: "Fast · 1 sec", balanced: "Balanced · 2 sec", strong: "Strong · 5 sec", deep: "Deep · 10 sec", newGame: "New game", downloadStockfish: "Get Stockfish",
-      engineOpponent: "Stockfish analysis", you: "You", yourSide: "White pieces", boardHint: "Click or drag a piece to see its legal squares.", selectedPieceMoves: "{piece} selected · {count} legal targets", capturedLabel: "Captured pieces: {pieces}", flipBoard: "Flip board",
+      engineOpponent: "Stockfish analysis", you: "You", yourSide: "White pieces", boardHint: "Right-drag: arrow · right-click: circle · Esc: clear.", selectedPieceMoves: "{piece} selected · {count} legal targets", capturedLabel: "Captured pieces: {pieces}", flipBoard: "Flip board", clearMarks: "Clear marks", lineShown: "Continuation shown on the board.", whiteAdvantage: "White advantage {score}", analyzing: "Stockfish is analyzing", markColors: "Hold Shift for red or Ctrl for blue annotations.",
       gameStatus: "GAME STATUS", loading: "Loading…", connecting: "Preparing the engine and board.", bestMove: "BEST MOVE", stockfish: "Stockfish",
       analysisWaiting: "The analysis will appear here", playedIt: "I played this move", alternatives: "ALTERNATIVE LINES", topLines: "Top 3 lines", noLines: "Waiting for analysis…",
       enterMove: "ENTER A MOVE", enterOpponent: "Type the opponent's move or play it on the board.", submitMove: "Submit move", examples: "Examples", moveHistory: "MOVES", fen: "FEN", copyPgn: "Copy PGN", noMoves: "No moves yet.",
@@ -43,7 +43,12 @@
   let toastTimer = 0;
   let pollTimer = 0;
   let draggedFrom = null;
+  let annotations = [];
+  let drawing = null;
+  let activeVariation = -1;
   const boardEl = $("board");
+  const annotationLayer = $("boardAnnotations");
+  const annotationColors = { green: "#a2c45a", red: "#e36455", blue: "#62a8ff" };
 
   const t = (key, vars = {}) => (text[lang][key] || key).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? "");
   const sideName = (side) => side === "white" ? t("white") : t("black");
@@ -61,6 +66,76 @@
     });
     return map;
   };
+  const squarePoint = (square) => {
+    if (!/^[a-h][1-8]$/.test(square || "")) return null;
+    const file = square.charCodeAt(0) - 97;
+    const rank = Number(square[1]);
+    return {
+      x: (flipped ? 7 - file : file) + 0.5,
+      y: (flipped ? rank - 1 : 8 - rank) + 0.5,
+    };
+  };
+  const squareAtPoint = (x, y) => {
+    const rect = boardEl.getBoundingClientRect();
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) return "";
+    const col = Math.min(7, Math.floor(((x - rect.left) / rect.width) * 8));
+    const row = Math.min(7, Math.floor(((y - rect.top) / rect.height) * 8));
+    const file = flipped ? 7 - col : col;
+    const rank = flipped ? row + 1 : 8 - row;
+    return squareName(file, rank - 1);
+  };
+  function renderAnnotations() {
+    if (!annotationLayer) return;
+    const fragment = document.createDocumentFragment();
+    const marks = annotations.concat(drawing ? [{ ...drawing, preview: true }] : []);
+    marks.forEach((mark) => {
+      const from = squarePoint(mark.from);
+      const to = squarePoint(mark.to);
+      if (!from || !to) return;
+      const color = annotationColors[mark.color] || annotationColors.green;
+      const opacity = mark.opacity ?? (mark.preview ? 0.72 : 0.9);
+      if (mark.type === "circle" || mark.from === mark.to) {
+        const outer = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        outer.setAttribute("cx", from.x); outer.setAttribute("cy", from.y); outer.setAttribute("r", "0.34");
+        outer.setAttribute("fill", color); outer.setAttribute("fill-opacity", "0.16");
+        outer.setAttribute("stroke", "#1b2117"); outer.setAttribute("stroke-width", "0.16");
+        outer.setAttribute("opacity", opacity);
+        const inner = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        inner.setAttribute("cx", from.x); inner.setAttribute("cy", from.y); inner.setAttribute("r", "0.34");
+        inner.setAttribute("fill", "none"); inner.setAttribute("stroke", color); inner.setAttribute("stroke-width", "0.11");
+        inner.setAttribute("opacity", opacity);
+        fragment.append(outer, inner);
+        return;
+      }
+      const dx = to.x - from.x, dy = to.y - from.y;
+      const length = Math.hypot(dx, dy);
+      const ux = dx / length, uy = dy / length;
+      const baseX = to.x - ux * 0.31, baseY = to.y - uy * 0.31;
+      const perpX = -uy * 0.15, perpY = ux * 0.15;
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      line.setAttribute("d", `M ${from.x} ${from.y} L ${baseX} ${baseY}`);
+      line.setAttribute("fill", "none"); line.setAttribute("stroke", "#1b2117");
+      line.setAttribute("stroke-width", "0.25"); line.setAttribute("stroke-linecap", "round");
+      line.setAttribute("opacity", opacity);
+      const coloredLine = line.cloneNode();
+      coloredLine.setAttribute("stroke", color); coloredLine.setAttribute("stroke-width", "0.15");
+      const head = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      head.setAttribute("points", `${baseX + perpX},${baseY + perpY} ${to.x},${to.y} ${baseX - perpX},${baseY - perpY}`);
+      head.setAttribute("fill", color); head.setAttribute("stroke", "#1b2117");
+      head.setAttribute("stroke-width", "0.07"); head.setAttribute("stroke-linejoin", "round");
+      head.setAttribute("opacity", opacity);
+      fragment.append(line, coloredLine, head);
+    });
+    annotationLayer.replaceChildren(fragment);
+    $("clearMarksButton").hidden = annotations.length === 0;
+  }
+  function clearAnnotations() {
+    annotations = [];
+    drawing = null;
+    activeVariation = -1;
+    $("variationsList").querySelectorAll("[data-variation]").forEach((row) => row.setAttribute("aria-pressed", "false"));
+    renderAnnotations();
+  }
   const coord = (uci, start = false) => uci && uci.length >= 4 ? (start ? uci.slice(0, 2) : uci.slice(2, 4)) : "";
   const friendlyMove = (uci, boardMap = parseFen(state?.fen), compact = true) => {
     const from = coord(uci, true), to = coord(uci);
@@ -90,11 +165,16 @@
     $("languageSelect").value = lang;
     $("moveInput").placeholder = t("inputPlaceholder");
     $("board").setAttribute("aria-label", t("boardLabel"));
+    $("evaluationColumn").setAttribute("aria-label", t("evaluation"));
     $("evaluationLabel").setAttribute("aria-label", t("evaluation"));
+    $("evaluationTrack").setAttribute("aria-label", t("evaluation"));
     $("undoButton").title = lang === "tr" ? "Geri al" : "Undo";
     $("undoButton").setAttribute("aria-label", $("undoButton").title);
     $("fenButton").title = lang === "tr" ? "FEN konumu yükle" : "Load FEN position";
     $("pgnButton").title = lang === "tr" ? "Oyunu PGN olarak kopyala" : "Copy game as PGN";
+    $("clearMarksButton").title = t("clearMarks");
+    $("analysisProgress").setAttribute("aria-label", t("analyzing"));
+    $("boardHintText").title = t("markColors");
     document.querySelectorAll("[data-example-tr]").forEach((button) => {
       button.textContent = lang === "tr" ? button.dataset.exampleTr : button.dataset.exampleEn;
     });
@@ -192,6 +272,7 @@
       fragment.append(cell);
     }));
     boardEl.replaceChildren(fragment);
+    renderAnnotations();
     if (selected) {
       const selectedPiece = map.get(selected);
       const count = legalDestinations.size;
@@ -241,14 +322,24 @@
     setText("depthDetail", state.thinking ? t("thinking") : reco ? `${t("depth")} ${reco.depth || "—"}${reco.seldepth ? ` / ${reco.seldepth}` : ""}` : state.analysisError ? t(state.analysisError === "engine_missing" ? "noEngine" : "engineFailed") : t("analysisWaiting"));
     setText("nodesDetail", reco?.nodes ? `${Number(reco.nodes).toLocaleString(lang === "tr" ? "tr-TR" : "en-US")} ${t("nodes")}` : "");
     $("playSuggestionButton").disabled = busy || state.thinking || !reco || state.turn !== state.humanColor || state.gameOver;
-    const humanWhiteScore = (score || 0) * (state.humanColor === "white" ? 1 : -1);
-    const whitePercent = Math.max(5, Math.min(95, 50 + 40 * Math.tanh(humanWhiteScore / 500)));
+    const whiteScore = score == null ? null : score * (state.humanColor === "white" ? 1 : -1);
+    const whitePercent = whiteScore == null ? 50 : Math.max(5, Math.min(95, 50 + 40 * Math.tanh(whiteScore / 500)));
+    const evaluationColumn = $("evaluationColumn");
+    const evaluationTrack = $("evaluationTrack");
+    evaluationColumn.classList.toggle("is-flipped", flipped);
     $("evaluationFill").style.height = `${whitePercent}%`;
-    setText("evaluationLabel", reco?.mate != null ? `M${reco.mate}` : score == null ? "—" : scoreText);
+    setText("evaluationLabel", reco?.mate != null ? t("mateScore", { n: reco.mate }) : score == null ? "—" : scoreText);
+    evaluationTrack.setAttribute("aria-valuenow", String(Math.round(whitePercent)));
+    const whiteMate = reco?.mate == null ? null : reco.mate * (state.humanColor === "white" ? 1 : -1);
+    const whiteScoreText = whiteMate != null
+      ? t("mateScore", { n: whiteMate })
+      : whiteScore == null ? "—" : `${whiteScore >= 0 ? "+" : ""}${(whiteScore / 100).toFixed(2)}`;
+    evaluationTrack.setAttribute("aria-valuetext", whiteScore == null && whiteMate == null ? t("analysisWaiting") : t("whiteAdvantage", { score: whiteScoreText }));
+    $("analysisProgress").hidden = !state.thinking;
     const variations = state.variations || [];
     $("variationsList").innerHTML = variations.length ? variations.map((line, index) => {
-      const number = line.mate != null ? `M${line.mate}` : line.scoreCp == null ? "—" : `${line.scoreCp >= 0 ? "+" : ""}${(line.scoreCp / 100).toFixed(2)}`;
-      return `<button type="button" class="variation-row" data-variation="${index}" title="${escapeHtml(friendlyLine(line.line))}"><span class="variation-rank">${index + 1}.</span><span class="variation-line">${escapeHtml(friendlyLine(line.line))}</span><span class="variation-score">${escapeHtml(number)}</span></button>`;
+      const number = line.mate != null ? t("mateScore", { n: line.mate }) : line.scoreCp == null ? "—" : `${line.scoreCp >= 0 ? "+" : ""}${(line.scoreCp / 100).toFixed(2)}`;
+      return `<button type="button" class="variation-row" data-variation="${index}" aria-pressed="${index === activeVariation}" title="${escapeHtml(friendlyLine(line.line))}"><span class="variation-rank">${index + 1}.</span><span class="variation-line">${escapeHtml(friendlyLine(line.line))}</span><span class="variation-score">${escapeHtml(number)}</span></button>`;
     }).join("") : `<div class="empty-line">${escapeHtml(state.thinking ? t("thinking") : t("noLines"))}</div>`;
   }
 
@@ -291,7 +382,7 @@
     const boardChanged = firstRender || sideChanged || changedPosition || state.lastMove !== nextState.lastMove;
     if (firstRender || sideChanged) flipped = nextState.humanColor === "black";
     state = nextState;
-    if (changedPosition) selected = null;
+    if (changedPosition) { selected = null; clearAnnotations(); }
     if (boardChanged) renderBoard();
     renderStatus();
     renderAnalysis();
@@ -318,6 +409,7 @@
     renderStatus();
     try {
       const next = await request(path, body);
+      if (path === "/api/new" || path === "/api/fen") clearAnnotations();
       render(next);
       if (successMessage) showToast(t(successMessage), true);
       return next;
@@ -338,6 +430,7 @@
     if (!legalMove(from, to)) return null;
     selected = null;
     draggedFrom = null;
+    clearAnnotations();
     return act("/api/move", { notation: `${from}${to}` }, "moveAccepted");
   }
 
@@ -387,11 +480,60 @@
     if (state) renderBoard();
   });
 
+  boardEl.addEventListener("contextmenu", (event) => event.preventDefault());
+  boardEl.addEventListener("pointerdown", (event) => {
+    if (event.button !== 2 || event.pointerType !== "mouse" || !state) return;
+    const cell = event.target.closest("[data-square]");
+    if (!cell) return;
+    event.preventDefault();
+    drawing = {
+      from: cell.dataset.square,
+      to: cell.dataset.square,
+      color: event.shiftKey ? "red" : event.ctrlKey ? "blue" : "green",
+    };
+    renderAnnotations();
+  });
+  window.addEventListener("pointermove", (event) => {
+    if (!drawing) return;
+    const target = squareAtPoint(event.clientX, event.clientY);
+    if (drawing.to !== target) {
+      drawing.to = target;
+      renderAnnotations();
+    }
+  });
+  window.addEventListener("pointerup", (event) => {
+    if (!drawing || (event.pointerType === "mouse" && event.button !== 2)) return;
+    const target = squareAtPoint(event.clientX, event.clientY);
+    if (target) {
+      const mark = { ...drawing, to: target, type: drawing.from === target ? "circle" : "arrow" };
+      const duplicate = annotations.findIndex((item) => item.from === mark.from && item.to === mark.to && item.color === mark.color && item.type === mark.type);
+      if (duplicate >= 0) annotations.splice(duplicate, 1);
+      else {
+        annotations = annotations.filter((item) => item.from !== mark.from || item.to !== mark.to || item.type !== mark.type);
+        annotations.push(mark);
+        if (annotations.length > 32) annotations.shift();
+      }
+    }
+    drawing = null;
+    renderAnnotations();
+  });
+  window.addEventListener("pointercancel", () => {
+    if (!drawing) return;
+    drawing = null;
+    renderAnnotations();
+  });
+
   boardEl.addEventListener("click", async (event) => {
+    if (event.button !== 0) return;
     const cell = event.target.closest("[data-square]");
     if (!cell || !state || busy || state.gameOver) return;
+    if (annotations.length) clearAnnotations();
     chooseSquare(cell.dataset.square);
   });
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && (annotations.length || drawing)) clearAnnotations();
+  });
+  $("clearMarksButton").addEventListener("click", clearAnnotations);
 
   $("moveForm").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -407,6 +549,18 @@
     });
   });
   $("playSuggestionButton").addEventListener("click", () => act("/api/play-suggestion", {}, "moveAccepted"));
+  $("variationsList").addEventListener("click", (event) => {
+    const row = event.target.closest("[data-variation]");
+    if (!row) return;
+    activeVariation = Number(row.dataset.variation);
+    $("variationsList").querySelectorAll("[data-variation]").forEach((item) => item.setAttribute("aria-pressed", String(item === row)));
+    const line = state?.variations?.[activeVariation]?.line || [];
+    annotations = line.slice(0, 3).map((item, index) => ({
+      from: coord(item.uci, true), to: coord(item.uci), type: "arrow", color: "blue", opacity: 0.9 - index * 0.18,
+    }));
+    renderAnnotations();
+    showToast(t("lineShown"), true);
+  });
   $("newGameButton").addEventListener("click", () => act("/api/new", { humanColor: $("sideSelect").value }));
   $("sideSelect").addEventListener("change", () => act("/api/new", { humanColor: $("sideSelect").value }));
   $("timeSelect").addEventListener("change", () => act("/api/settings", { analysisTime: Number($("timeSelect").value) }));
@@ -415,7 +569,7 @@
     localStorage.setItem("chess-assistant-language", lang);
     applyLanguage();
   });
-  $("flipBoardButton").addEventListener("click", () => { flipped = !flipped; renderBoard(); });
+  $("flipBoardButton").addEventListener("click", () => { flipped = !flipped; $("evaluationColumn").classList.toggle("is-flipped", flipped); renderBoard(); });
   $("undoButton").addEventListener("click", () => act("/api/undo", {}, ""));
   $("fenButton").addEventListener("click", () => {
     $("fenInput").value = state?.fen || "";
