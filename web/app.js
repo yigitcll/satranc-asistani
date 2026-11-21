@@ -169,7 +169,7 @@
       }
       if (piece) {
         const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        icon.className = `piece ${piece === piece.toUpperCase() ? "white" : "black"}`;
+        icon.setAttribute("class", `piece ${piece === piece.toUpperCase() ? "white" : "black"}`);
         icon.setAttribute("viewBox", "0 0 100 100");
         icon.setAttribute("aria-hidden", "true");
         const symbol = document.createElementNS("http://www.w3.org/2000/svg", "use");
