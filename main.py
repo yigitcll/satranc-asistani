@@ -25,18 +25,18 @@ APP_DIR = Path(__file__).resolve().parent
 WEB_DIR = APP_DIR / "web"
 SQUARE_PATTERN = re.compile(r"(?<![a-z0-9])[a-h][1-8](?![a-z0-9])", re.IGNORECASE)
 COORDINATE_PATTERN = re.compile(
-    r"^([a-h][1-8])\s*(?:(?:-|–|→|to|naar)\s*)?([a-h][1-8])([qrbn]?)$",
+    r"^([a-h][1-8])\s*(?:(?:-|–|→|to|naar|a|hacia|до|на)\s*)?([a-h][1-8])([qrbn]?)$",
     re.IGNORECASE,
 )
 MOVE_NUMBER_PATTERN = re.compile(r"^\d+\.(?:\.\.)?\s*")
 
 PIECE_WORDS = {
-    chess.PAWN: ("piyon", "pawn"),
-    chess.KNIGHT: ("at", "knight", "horse"),
-    chess.BISHOP: ("fil", "bishop"),
-    chess.ROOK: ("kale", "rook"),
-    chess.QUEEN: ("vezir", "queen"),
-    chess.KING: ("şah", "sah", "kral", "king"),
+    chess.PAWN: ("piyon", "pawn", "peon", "peones", "пешка", "пешку", "пешки", "пешкой"),
+    chess.KNIGHT: ("at", "knight", "horse", "caballo", "caballos", "конь", "коня", "коню", "конём", "конем", "коней"),
+    chess.BISHOP: ("fil", "bishop", "alfil", "alfiles", "слон", "слона", "слону", "слоном", "слоны"),
+    chess.ROOK: ("kale", "rook", "torre", "torres", "ладья", "ладью", "ладьи", "ладье", "ладьей", "ладьёй"),
+    chess.QUEEN: ("vezir", "queen", "dama", "reina", "ферзь", "ферзя", "ферзю", "ферзем", "ферзём", "ферзи"),
+    chess.KING: ("şah", "sah", "kral", "king", "rey", "reyes", "король", "короля", "королю", "королем", "королём", "короли"),
 }
 class MoveParseError(Exception):
     def __init__(self, code: str, candidates: list[str] | None = None):
@@ -111,8 +111,8 @@ def parse_move(board: chess.Board, raw: str) -> chess.Move:
     text = text.replace("0-0-0", "O-O-O").replace("0-0", "O-O")
     compact = re.sub(r"\s+", "", text)
 
-    # Spoken-style castling descriptions in Turkish and English.
-    normalized = re.sub(r"[^a-z0-9]+", " ", _normalize_language(text)).strip()
+    # Keep Unicode letters so Spanish and Russian spoken castling is recognized too.
+    normalized = " ".join(re.findall(r"[^\W_]+", _normalize_language(text), flags=re.UNICODE)).strip()
     castle_aliases = {
         "kingside": chess.KING,
         "king side": chess.KING,
@@ -120,23 +120,34 @@ def parse_move(board: chess.Board, raw: str) -> chess.Move:
         "kisa": chess.KING,
         "sah kanadi": chess.KING,
         "sah kanadina": chess.KING,
+        "corto": chess.KING,
+        "corta": chess.KING,
+        "короткая": chess.KING,
+        "короткий": chess.KING,
+        "короткую": chess.KING,
+        "короткое": chess.KING,
         "queenside": chess.QUEEN,
         "queen side": chess.QUEEN,
         "long": chess.QUEEN,
         "uzun": chess.QUEEN,
         "vezir kanadi": chess.QUEEN,
         "vezir kanadina": chess.QUEEN,
+        "largo": chess.QUEEN,
+        "larga": chess.QUEEN,
+        "длинная": chess.QUEEN,
+        "длинный": chess.QUEEN,
+        "длинное": chess.QUEEN,
     }
     castle_moves = [move for move in board.legal_moves if board.is_castling(move)]
     castle_side = next((side for phrase, side in castle_aliases.items()
-                        if phrase in normalized and ("rok" in normalized or "castle" in normalized or "castling" in normalized)), None)
+                        if phrase in normalized and ("rok" in normalized or "castle" in normalized or "castling" in normalized or "enroque" in normalized or "рокир" in normalized)), None)
     if castle_side is not None:
         matching = [move for move in castle_moves if (chess.square_file(move.to_square) == 6) == (castle_side == chess.KING)]
         if len(matching) == 1:
             return matching[0]
         if matching:
             raise MoveParseError("ambiguous", [board.san(move) for move in matching])
-    elif normalized in {"rok", "castle", "castling", "rok yap", "castle now"}:
+    elif normalized in {"rok", "castle", "castling", "rok yap", "castle now", "enroque", "рокировка", "рокироваться"}:
         if len(castle_moves) == 1:
             return castle_moves[0]
         if castle_moves:
@@ -173,13 +184,19 @@ def parse_move(board: chess.Board, raw: str) -> chess.Move:
     # Friendly coordinates: “kale h8”, “rook h8”, “at f3”, “bishop c4”.
     squares = [square.lower() for square in SQUARE_PATTERN.findall(text)]
     piece_type = _piece_type_from_words(text)
-    capture_only = bool(re.search(r"\b(?:al|alir|take|takes|capture|captures|captured)\b|\bx\b", _normalize_language(text)))
+    capture_words = {
+        "al", "alir", "take", "takes", "capture", "captures", "captured",
+        "tomar", "toma", "toman", "capturar", "captura", "capturan",
+        "взять", "взял", "взяла", "берет", "берёт", "бьет", "бьёт", "взятие",
+    }
+    words = set(re.findall(r"[^\W_]+", _normalize_language(text), flags=re.UNICODE))
+    capture_only = bool(words & capture_words or re.search(r"\bx\b", _normalize_language(text)))
 
     if len(squares) >= 2:
         origin = chess.parse_square(squares[0])
         destination = chess.parse_square(squares[1])
         source_reference = re.search(
-            r"\b(?:from|off)\s+([a-h][1-8])\b|\b([a-h][1-8])\s+(?:den|dan)\b",
+            r"\b(?:from|off|desde|de|с|из)\s+([a-h][1-8])\b|\b([a-h][1-8])\s+(?:den|dan)\b",
             normalized,
         )
         if source_reference:

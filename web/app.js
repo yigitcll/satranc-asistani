@@ -4,6 +4,14 @@
   const pieceNames = {
     tr: { K: "Şah", Q: "Vezir", R: "Kale", B: "Fil", N: "At", P: "Piyon", k: "Şah", q: "Vezir", r: "Kale", b: "Fil", n: "At", p: "Piyon" },
     en: { K: "King", Q: "Queen", R: "Rook", B: "Bishop", N: "Knight", P: "Pawn", k: "King", q: "Queen", r: "Rook", b: "Bishop", n: "Knight", p: "Pawn" },
+    es: { K: "Rey", Q: "Dama", R: "Torre", B: "Alfil", N: "Caballo", P: "Peón", k: "Rey", q: "Dama", r: "Torre", b: "Alfil", n: "Caballo", p: "Peón" },
+    ru: { K: "Король", Q: "Ферзь", R: "Ладья", B: "Слон", N: "Конь", P: "Пешка", k: "Король", q: "Ферзь", r: "Ладья", b: "Слон", n: "Конь", p: "Пешка" },
+  };
+  const promotionNames = {
+    tr: { Q: "Vezir", R: "Kale", B: "Fil", N: "At" },
+    en: { Q: "Queen", R: "Rook", B: "Bishop", N: "Knight" },
+    es: { Q: "Dama", R: "Torre", B: "Alfil", N: "Caballo" },
+    ru: { Q: "Ферзь", R: "Ладья", B: "Слон", N: "Конь" },
   };
   const text = {
     tr: {
@@ -17,7 +25,7 @@
       sideWhite: "Beyaz taşlarla oynuyorsun.", sideBlack: "Siyah taşlarla oynuyorsun.", yourTurn: "Sıra sende", opponentTurn: "Rakibin hamlesini gir", thinking: "Stockfish konumu inceliyor…", waitAnalysis: "Analiz tamamlanınca en iyi hamle burada gösterilecek.",
       recommendIntro: "Önerilen hamle", playRecommended: "Bu hamleyi oynayabilir veya kendi hamleni girebilirsin.", waitingOpponent: "Rakibin hamlesini notasyonla yazabilir ya da tahtada oynatabilirsin.", gameOver: "Oyun bitti", result: "Sonuç", check: "Şah var", checkmate: "Şah mat", stalemate: "Pat", analysis: "Analiz", depth: "Derinlik", nodes: "düğüm", nodesPlural: "düğüm", noEngine: "Stockfish bulunamadı. Proje klasöründeki stockfish klasörünü kontrol et.", engineFailed: "Stockfish başlatılamadı. Motor dosyasını veya güvenlik izinlerini kontrol et.",
       err_empty: "Bir hamle yaz veya tahtadan hamle seç.", err_missing_square: "Hamlede hedef kareyi belirt. Örnek: kale h8 veya e2-e4.", err_not_legal: "Bu hamle mevcut konumda yasal görünmüyor. Tahtadaki olası kareleri kontrol et.", err_ambiguous: "Bu tarif birden fazla hamleye uyuyor. Şunlardan birini yaz: {moves}", err_invalid_fen: "FEN konumu geçersiz ya da satranç kurallarına aykırı.", err_nothing_to_undo: "Geri alınacak hamle yok.", err_no_suggestion: "Henüz oynanabilir bir öneri yok; analiz bitince tekrar dene.", err_invalid_time: "Bu analiz süresi desteklenmiyor.", err_not_found: "İstenen işlem bulunamadı.", err_invalid_request: "İstek okunamadı. Tekrar dene.", err_unknown: "İşlem tamamlanamadı. Tekrar dene.",
-      moveAccepted: "Hamle işlendi.", fenLoaded: "Konum yüklendi.", pgnCopied: "PGN panoya kopyalandı.", pgnCopyFail: "PGN kopyalanamadı.", inputPlaceholder: "Örn. kale h8'e · a8'den h8'e · Nf3", boardLabel: "Satranç tahtası", evaluation: "Konum değerlendirmesi", moveLabel: "{piece} {from} karesinden {to} karesine", moveAria: "{square} karesine git", checkSuffix: "şah", mateScore: "Mat {n}",
+      moveAccepted: "Hamle işlendi.", fenLoaded: "Konum yüklendi.", pgnCopied: "PGN panoya kopyalandı.", pgnCopyFail: "PGN kopyalanamadı.", inputPlaceholder: "Örn. kale h8'e · a8'den h8'e · Nf3", boardLabel: "Satranç tahtası", evaluation: "Konum değerlendirmesi", moveLabel: "{piece} {from} karesinden {to} karesine", moveAria: "{square} karesine git", checkSuffix: "şah", mateScore: "Mat {n}", blackPieces: "Siyah taşlar", undoTitle: "Geri al", loadFenTitle: "FEN konumu yükle", copyPgnTitle: "Oyunu PGN olarak kopyala", closeDialog: "Kapat", languageLabel: "Dil",
     },
     en: {
       brand: "Chess Assistant", tagline: "Read the position, understand your move, play better.", playAs: "Play as", white: "White", black: "Black", thinkTime: "Analysis",
@@ -30,7 +38,33 @@
       sideWhite: "You are playing White.", sideBlack: "You are playing Black.", yourTurn: "Your turn", opponentTurn: "Enter opponent's move", thinking: "Stockfish is analyzing the position…", waitAnalysis: "The best move will appear here when analysis finishes.",
       recommendIntro: "Recommended move", playRecommended: "Play the suggestion or enter the move you chose.", waitingOpponent: "Enter the opponent's notation or play their move on the board.", gameOver: "Game over", result: "Result", check: "Check", checkmate: "Checkmate", stalemate: "Stalemate", analysis: "Analysis", depth: "Depth", nodes: "nodes", nodesPlural: "nodes", noEngine: "Stockfish was not found. Check the stockfish folder in the project.", engineFailed: "Stockfish could not start. Check the engine file and its permissions.",
       err_empty: "Enter a move or choose one on the board.", err_missing_square: "Include the destination square. Example: rook h8 or e2-e4.", err_not_legal: "That move is not legal in this position. Check the highlighted legal squares.", err_ambiguous: "This description matches more than one move. Choose one: {moves}", err_invalid_fen: "The FEN position is invalid or violates chess rules.", err_nothing_to_undo: "There are no moves to undo.", err_no_suggestion: "There is no move suggestion yet. Try again after analysis finishes.", err_invalid_time: "This analysis time is not supported.", err_not_found: "The requested action was not found.", err_invalid_request: "The request could not be read. Try again.", err_unknown: "The action could not be completed. Try again.",
-      moveAccepted: "Move recorded.", fenLoaded: "Position loaded.", pgnCopied: "PGN copied to clipboard.", pgnCopyFail: "Could not copy the PGN.", inputPlaceholder: "e.g. rook to h8 · a8 to h8 · Nf3", boardLabel: "Chess board", evaluation: "Position evaluation", moveLabel: "{piece} from {from} to {to}", moveAria: "Move to {square}", checkSuffix: "check", mateScore: "Mate {n}",
+      moveAccepted: "Move recorded.", fenLoaded: "Position loaded.", pgnCopied: "PGN copied to clipboard.", pgnCopyFail: "Could not copy the PGN.", inputPlaceholder: "e.g. rook to h8 · a8 to h8 · Nf3", boardLabel: "Chess board", evaluation: "Position evaluation", moveLabel: "{piece} from {from} to {to}", moveAria: "Move to {square}", checkSuffix: "check", mateScore: "Mate {n}", blackPieces: "Black pieces", undoTitle: "Undo", loadFenTitle: "Load FEN position", copyPgnTitle: "Copy game as PGN", closeDialog: "Close", languageLabel: "Language",
+    },
+    es: {
+      brand: "Asistente de Ajedrez", tagline: "Entiende la posición, aprende tus jugadas y juega mejor.", playAs: "Jugar con", white: "Blancas", black: "Negras", thinkTime: "Análisis",
+      fast: "Rápido · 1 s", balanced: "Equilibrado · 2 s", strong: "Fuerte · 5 s", deep: "Profundo · 10 s", newGame: "Nueva partida", downloadStockfish: "Descargar Stockfish",
+      engineOpponent: "Análisis de Stockfish", you: "Tú", yourSide: "Piezas blancas", blackPieces: "Piezas negras", boardHint: "Clic derecho y arrastra: flecha · clic derecho: círculo · Esc: borrar.", selectedPieceMoves: "{piece} seleccionada · {count} destinos legales", capturedLabel: "Piezas capturadas: {pieces}", flipBoard: "Girar tablero", clearMarks: "Borrar marcas", lineShown: "La continuación se muestra en el tablero.", whiteAdvantage: "Ventaja de blancas {score}", analyzing: "Stockfish está analizando", markColors: "Mayús: marcas rojas · Ctrl: marcas azules.",
+      gameStatus: "ESTADO DE LA PARTIDA", loading: "Cargando…", connecting: "Preparando el motor y el tablero.", bestMove: "MEJOR JUGADA", stockfish: "Stockfish",
+      analysisWaiting: "El análisis aparecerá aquí", playedIt: "Ya jugué esta jugada", alternatives: "LÍNEAS ALTERNATIVAS", topLines: "3 mejores líneas", noLines: "Esperando el análisis…",
+      enterMove: "INTRODUCIR JUGADA", enterOpponent: "Escribe la jugada rival o hazla en el tablero.", submitMove: "Procesar jugada", examples: "Ejemplos", moveHistory: "JUGADAS", fen: "FEN", copyPgn: "Copiar PGN", noMoves: "Aún no hay jugadas.",
+      localEngine: "Análisis local con Stockfish", timeDisclaimer: "Las sugerencias dependen del tiempo de análisis y del equipo.", loadPosition: "CARGAR POSICIÓN", pasteFen: "Pega una posición FEN", cancel: "Cancelar", loadPositionButton: "Cargar posición",
+      sideWhite: "Juegas con blancas.", sideBlack: "Juegas con negras.", yourTurn: "Tu turno", opponentTurn: "Introduce la jugada rival", thinking: "Stockfish está analizando la posición…", waitAnalysis: "La mejor jugada aparecerá cuando termine el análisis.",
+      recommendIntro: "Jugada recomendada", playRecommended: "Puedes jugar la sugerencia o introducir tu propia jugada.", waitingOpponent: "Escribe la notación rival o juega su movimiento en el tablero.", gameOver: "Partida terminada", result: "Resultado", check: "Jaque", checkmate: "Jaque mate", stalemate: "Ahogado", analysis: "Análisis", depth: "Profundidad", nodes: "nodos", nodesPlural: "nodos", noEngine: "No se encontró Stockfish. Comprueba la carpeta stockfish del proyecto.", engineFailed: "No se pudo iniciar Stockfish. Comprueba el archivo del motor y sus permisos.",
+      err_empty: "Escribe una jugada o elígela en el tablero.", err_missing_square: "Indica la casilla de destino. Ejemplo: torre h8 o e2-e4.", err_not_legal: "Esa jugada no es legal en esta posición. Comprueba las casillas resaltadas.", err_ambiguous: "La descripción coincide con varias jugadas. Elige una: {moves}", err_invalid_fen: "La posición FEN no es válida o incumple las reglas.", err_nothing_to_undo: "No hay jugadas que deshacer.", err_no_suggestion: "Aún no hay una sugerencia. Vuelve a intentarlo cuando termine el análisis.", err_invalid_time: "Ese tiempo de análisis no está disponible.", err_not_found: "No se encontró la operación solicitada.", err_invalid_request: "No se pudo leer la solicitud. Inténtalo de nuevo.", err_unknown: "No se pudo completar la operación. Inténtalo de nuevo.",
+      moveAccepted: "Jugada registrada.", fenLoaded: "Posición cargada.", pgnCopied: "PGN copiado.", pgnCopyFail: "No se pudo copiar el PGN.", inputPlaceholder: "p. ej., torre a h8 · de a8 a h8 · caballo a f3", boardLabel: "Tablero de ajedrez", evaluation: "Evaluación de la posición", moveLabel: "{piece} de {from} a {to}", moveAria: "Mover a {square}", checkSuffix: "jaque", mateScore: "Mate {n}", undoTitle: "Deshacer", loadFenTitle: "Cargar posición FEN", copyPgnTitle: "Copiar partida como PGN", closeDialog: "Cerrar", languageLabel: "Idioma",
+    },
+    ru: {
+      brand: "Шахматный помощник", tagline: "Понимай позицию, разбирай ходы и играй сильнее.", playAs: "Играть за", white: "Белых", black: "Чёрных", thinkTime: "Анализ",
+      fast: "Быстрый · 1 с", balanced: "Обычный · 2 с", strong: "Сильный · 5 с", deep: "Глубокий · 10 с", newGame: "Новая партия", downloadStockfish: "Скачать Stockfish",
+      engineOpponent: "Анализ Stockfish", you: "Вы", yourSide: "Белые фигуры", blackPieces: "Чёрные фигуры", boardHint: "Правая кнопка и перетаскивание: стрелка · щелчок: круг · Esc: очистить.", selectedPieceMoves: "Выбрана фигура «{piece}» · допустимых ходов: {count}", capturedLabel: "Взятые фигуры: {pieces}", flipBoard: "Перевернуть доску", clearMarks: "Убрать пометки", lineShown: "Продолжение показано стрелками на доске.", whiteAdvantage: "Преимущество белых {score}", analyzing: "Stockfish анализирует позицию", markColors: "Shift — красные пометки · Ctrl — синие.",
+      gameStatus: "СОСТОЯНИЕ ПАРТИИ", loading: "Загрузка…", connecting: "Подготовка движка и доски.", bestMove: "ЛУЧШИЙ ХОД", stockfish: "Stockfish",
+      analysisWaiting: "Здесь появится результат анализа", playedIt: "Я сделал этот ход", alternatives: "АЛЬТЕРНАТИВНЫЕ ПРОДОЛЖЕНИЯ", topLines: "Лучшие 3 варианта", noLines: "Ожидание анализа…",
+      enterMove: "ВВЕСТИ ХОД", enterOpponent: "Введите ход соперника или сделайте его на доске.", submitMove: "Применить ход", examples: "Примеры", moveHistory: "ХОДЫ", fen: "FEN", copyPgn: "Копировать PGN", noMoves: "Ходов пока нет.",
+      localEngine: "Локальный анализ Stockfish", timeDisclaimer: "Подсказки зависят от времени анализа и мощности компьютера.", loadPosition: "ЗАГРУЗИТЬ ПОЗИЦИЮ", pasteFen: "Вставьте позицию FEN", cancel: "Отмена", loadPositionButton: "Загрузить позицию",
+      sideWhite: "Вы играете белыми.", sideBlack: "Вы играете чёрными.", yourTurn: "Ваш ход", opponentTurn: "Введите ход соперника", thinking: "Stockfish анализирует позицию…", waitAnalysis: "Лучший ход появится после завершения анализа.",
+      recommendIntro: "Рекомендуемый ход", playRecommended: "Сделайте рекомендованный ход или введите свой.", waitingOpponent: "Введите запись хода соперника или сделайте ход на доске.", gameOver: "Партия завершена", result: "Результат", check: "Шах", checkmate: "Мат", stalemate: "Пат", analysis: "Анализ", depth: "Глубина", nodes: "узлов", nodesPlural: "узлов", noEngine: "Stockfish не найден. Проверьте папку stockfish в проекте.", engineFailed: "Не удалось запустить Stockfish. Проверьте файл движка и разрешения.",
+      err_empty: "Введите ход или выберите его на доске.", err_missing_square: "Укажите поле назначения. Например: ладья h8 или e2-e4.", err_not_legal: "Этот ход недопустим в текущей позиции. Проверьте подсвеченные поля.", err_ambiguous: "Описание подходит к нескольким ходам. Выберите один: {moves}", err_invalid_fen: "Позиция FEN некорректна или нарушает правила.", err_nothing_to_undo: "Нет ходов для отмены.", err_no_suggestion: "Подсказки пока нет. Попробуйте снова после анализа.", err_invalid_time: "Такое время анализа не поддерживается.", err_not_found: "Запрошенная операция не найдена.", err_invalid_request: "Не удалось прочитать запрос. Попробуйте ещё раз.", err_unknown: "Не удалось выполнить действие. Попробуйте ещё раз.",
+      moveAccepted: "Ход записан.", fenLoaded: "Позиция загружена.", pgnCopied: "PGN скопирован.", pgnCopyFail: "Не удалось скопировать PGN.", inputPlaceholder: "Например: ладья на h8 · с a8 на h8 · конь на f3", boardLabel: "Шахматная доска", evaluation: "Оценка позиции", moveLabel: "{piece}: с {from} на {to}", moveAria: "Ход на {square}", checkSuffix: "шах", mateScore: "Мат {n}", undoTitle: "Отменить ход", loadFenTitle: "Загрузить позицию FEN", copyPgnTitle: "Скопировать партию в PGN", closeDialog: "Закрыть", languageLabel: "Язык",
     },
   };
 
@@ -142,7 +176,7 @@
     const p = boardMap.get(from) || "P";
     const piece = pieceNames[lang][p];
     const move = compact ? `${piece} ${from} → ${to}` : t("moveLabel", { piece, from, to });
-    const promotion = uci?.length > 4 ? `=${lang === "tr" ? ({ Q: "Vezir", R: "Kale", B: "Fil", N: "At" }[uci.at(-1).toUpperCase()] || uci.at(-1).toUpperCase()) : ({ Q: "Queen", R: "Rook", B: "Bishop", N: "Knight" }[uci.at(-1).toUpperCase()] || uci.at(-1).toUpperCase())}` : "";
+    const promotion = uci?.length > 4 ? `=${promotionNames[lang][uci.at(-1).toUpperCase()] || uci.at(-1).toUpperCase()}` : "";
     return `${move}${promotion}`;
   };
   const friendlyLine = (line) => {
@@ -163,20 +197,27 @@
     document.title = t("brand");
     document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     $("languageSelect").value = lang;
+    $("languageSelect").setAttribute("aria-label", t("languageLabel"));
+    document.querySelector(".language-picker").setAttribute("aria-label", t("languageLabel"));
     $("moveInput").placeholder = t("inputPlaceholder");
+    $("moveInput").setAttribute("aria-label", t("enterMove"));
     $("board").setAttribute("aria-label", t("boardLabel"));
     $("evaluationColumn").setAttribute("aria-label", t("evaluation"));
     $("evaluationLabel").setAttribute("aria-label", t("evaluation"));
     $("evaluationTrack").setAttribute("aria-label", t("evaluation"));
-    $("undoButton").title = lang === "tr" ? "Geri al" : "Undo";
+    $("undoButton").title = t("undoTitle");
     $("undoButton").setAttribute("aria-label", $("undoButton").title);
-    $("fenButton").title = lang === "tr" ? "FEN konumu yükle" : "Load FEN position";
-    $("pgnButton").title = lang === "tr" ? "Oyunu PGN olarak kopyala" : "Copy game as PGN";
+    $("fenButton").title = t("loadFenTitle");
+    $("pgnButton").title = t("copyPgnTitle");
+    $("closeFenDialog").setAttribute("aria-label", t("closeDialog"));
+    $("sideSelect").setAttribute("aria-label", t("playAs"));
+    $("timeSelect").setAttribute("aria-label", t("thinkTime"));
     $("clearMarksButton").title = t("clearMarks");
     $("analysisProgress").setAttribute("aria-label", t("analyzing"));
     $("boardHintText").title = t("markColors");
+    const exampleSuffix = { tr: "Tr", en: "En", es: "Es", ru: "Ru" }[lang];
     document.querySelectorAll("[data-example-tr]").forEach((button) => {
-      button.textContent = lang === "tr" ? button.dataset.exampleTr : button.dataset.exampleEn;
+      button.textContent = button.dataset[`example${exampleSuffix}`] || button.dataset.exampleEn;
     });
     if (state) {
       render(state);
@@ -320,7 +361,7 @@
     else if (score != null) scoreText = `${score >= 0 ? "+" : ""}${(score / 100).toFixed(2)}`;
     setText("bestScore", scoreText);
     setText("depthDetail", state.thinking ? t("thinking") : reco ? `${t("depth")} ${reco.depth || "—"}${reco.seldepth ? ` / ${reco.seldepth}` : ""}` : state.analysisError ? t(state.analysisError === "engine_missing" ? "noEngine" : "engineFailed") : t("analysisWaiting"));
-    setText("nodesDetail", reco?.nodes ? `${Number(reco.nodes).toLocaleString(lang === "tr" ? "tr-TR" : "en-US")} ${t("nodes")}` : "");
+    setText("nodesDetail", reco?.nodes ? `${Number(reco.nodes).toLocaleString(({ tr: "tr-TR", en: "en-US", es: "es-ES", ru: "ru-RU" })[lang])} ${t("nodes")}` : "");
     $("playSuggestionButton").disabled = busy || state.thinking || !reco || state.turn !== state.humanColor || state.gameOver;
     const whiteScore = score == null ? null : score * (state.humanColor === "white" ? 1 : -1);
     const whitePercent = whiteScore == null ? 50 : Math.max(5, Math.min(95, 50 + 40 * Math.tanh(whiteScore / 500)));
@@ -345,7 +386,7 @@
 
   function renderStatus() {
     const myTurn = state.turn === state.humanColor;
-    const sideCaption = state.humanColor === "white" ? t("yourSide") : (lang === "tr" ? "Siyah taşlar" : "Black pieces");
+    const sideCaption = state.humanColor === "white" ? t("yourSide") : t("blackPieces");
     setText("humanCaption", sideCaption);
     setText("opponentName", "Stockfish");
     setText("opponentCaption", t("engineOpponent"));
@@ -544,7 +585,8 @@
   });
   document.querySelectorAll("[data-example-tr]").forEach((button) => {
     button.addEventListener("click", () => {
-      $("moveInput").value = lang === "tr" ? button.dataset.exampleTr : button.dataset.exampleEn;
+      const suffix = { tr: "Tr", en: "En", es: "Es", ru: "Ru" }[lang];
+      $("moveInput").value = button.dataset[`example${suffix}`] || button.dataset.exampleEn;
       $("moveInput").focus();
     });
   });

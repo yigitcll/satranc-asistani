@@ -1,6 +1,6 @@
 # Satranç Asistanı
 
-Türkçe ve İngilizce arayüze sahip, Stockfish motoruyla çalışan bir satranç uygulaması. Tahtada taş seçip yasal hamleleri görebilir, taşı sürükleyebilir ve hamleleri günlük ifadelerle yazabilirsiniz.
+Dört dilli arayüze sahip, Stockfish motoruyla çalışan bir satranç uygulaması. Tahtada taş seçip yasal hamleleri görebilir, taşı sürükleyebilir ve hamleleri günlük ifadelerle yazabilirsiniz.
 
 ## Özellikler
 
@@ -9,8 +9,9 @@ Türkçe ve İngilizce arayüze sahip, Stockfish motoruyla çalışan bir satran
 - Sağ tıkla sürükleyerek ok, sağ tıkla kareyi daire içine alma; Shift/Ctrl ile renk seçimi
 - Alternatif Stockfish devamına tıklayarak ilk hamleleri tahtada oklarla görme
 - Tahta yönüne uyum sağlayan beyaz/siyah değerlendirme çubuğu ve canlı analiz göstergesi
-- Türkçe ve İngilizce arayüz
+- Türkçe, İngilizce, İspanyolca ve Rusça arayüz ve doğal dille hamle girişi
 - `kale h8`, `at f3`, `e2 e4`, `rook to h8` ve `Nf3` gibi hamle girişleri
+- `torre a h8`, `enroque corto`, `ладья на h8` ve `короткая рокировка` gibi İspanyolca/Rusça hamle tarifleri
 - Stockfish ile hamle önerisi ve analiz
 - Alınan taşlar, şah uyarısı ve tahtayı çevirme
 - Windows'ta tarayıcı araç çubukları olmadan uygulama penceresinde açılma
