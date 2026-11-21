@@ -1,0 +1,20 @@
+{
+  "name": "Satranç Asistanı",
+  "short_name": "Satranç",
+  "description": "Türkçe ve İngilizce Stockfish destekli satranç analiz uygulaması",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#171916",
+  "theme_color": "#171916",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

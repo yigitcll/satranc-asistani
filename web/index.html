@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171916">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <title>Satranç Asistanı</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <svg class="piece-definitions" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="piece-white-fill" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fffef7"/><stop offset=".58" stop-color="#e8e5d8"/><stop offset="1" stop-color="#c9c6bb"/>
+      </linearGradient>
+      <linearGradient id="piece-black-fill" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#85827b"/><stop offset=".52" stop-color="#5d5a55"/><stop offset="1" stop-color="#3f3e3a"/>
+      </linearGradient>
+    </defs>
+    <symbol id="piece-king" viewBox="0 0 100 100">
+      <path d="M45 4h10v11h12v10H55v10h-10V25H33V15h12z"/>
+      <path d="M39 37h22c2 6 7 9 12 15l-4 27H31l-4-27c5-6 10-9 12-15z"/>
+      <path d="M27 76h46l7 7v7H20v-7zM17 90h66v5H17z"/>
+      <path d="M43 46l7 7 7-7 5 5-12 14-12-14z" fill="#222" fill-opacity=".42" stroke="none"/>
+    </symbol>
+    <symbol id="piece-queen" viewBox="0 0 100 100">
+      <path d="M22 31l17 12 11-23 11 23 17-12-6 35H28z"/>
+      <circle cx="22" cy="25" r="7"/><circle cx="50" cy="14" r="7"/><circle cx="78" cy="25" r="7"/>
+      <path d="M27 67h46l6 10H21zM17 78h66v9H17zM14 89h72v6H14z"/>
+      <path d="M34 73h32" fill="none" stroke="#222" stroke-opacity=".42" stroke-width="3"/>
+    </symbol>
+    <symbol id="piece-rook" viewBox="0 0 100 100">
+      <path d="M22 10h12v10h10V10h12v10h10V10h12v15H22z"/>
+      <path d="M25 26h50l-4 43H29z"/>
+      <path d="M25 68h50l8 9H17zM14 79h72v10H14zM11 90h78v5H11z"/>
+      <path d="M37 33v28M50 33v28M63 33v28" fill="none" stroke="#222" stroke-opacity=".34" stroke-width="3"/>
+    </symbol>
+    <symbol id="piece-bishop" viewBox="0 0 100 100">
+      <path d="M50 8c-5 0-8 5-5 9-10 8-18 20-17 34 1 9 5 15 11 20l-5 7h32l-5-7c6-5 10-11 11-20 1-14-7-26-17-34 3-4 0-9-5-9z"/>
+      <path d="M28 68h44l9 9H19zM15 79h70v10H15zM11 90h78v5H11z"/>
+      <path d="M57 19L39 51" fill="none" stroke="#222" stroke-opacity=".55" stroke-width="4"/>
+    </symbol>
+    <symbol id="piece-knight" viewBox="0 0 100 100">
+      <path d="M25 74c1-12 0-23 6-34 5-9 14-16 25-24l-4-8c9 1 17 7 21 14 9 2 15 9 15 18l-10 7-5 27z"/>
+      <path d="M35 58c10 2 20-2 27-10l4 17-4 12H29z"/>
+      <path d="M26 70h48l8 8H18zM14 80h72v9H14zM11 90h78v5H11z"/>
+      <circle cx="62" cy="31" r="3.5" fill="#eee" stroke="none"/>
+      <path d="M39 40l8 6-9 3" fill="none" stroke="#222" stroke-opacity=".55" stroke-width="3"/>
+    </symbol>
+    <symbol id="piece-pawn" viewBox="0 0 100 100">
+      <circle cx="50" cy="24" r="14"/>
+      <path d="M43 36h14v10c0 5 5 8 12 13l-5 17H36l-5-17c7-5 12-8 12-13z"/>
+      <path d="M32 68c11-5 25-5 36 0l7 10H25zM20 79h60v10H20zM16 90h68v5H16z"/>
+      <path d="M42 16c-5 4-6 10-5 15" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="3"/>
+    </symbol>
+  </svg>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">♞</div>
+        <div>
+          <div class="brand-title" data-i18n="brand">Satranç Asistanı</div>
+          <div class="brand-subtitle" data-i18n="tagline">Konumunu gör, hamleni anla, daha iyi oyna.</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <label class="select-label" for="sideSelect" data-i18n="playAs">Rengim</label>
+        <select id="sideSelect" class="control-select" aria-label="Rengim">
+          <option value="white" data-i18n="white">Beyaz</option>
+          <option value="black" data-i18n="black">Siyah</option>
+        </select>
+        <label class="select-label time-label" for="timeSelect" data-i18n="thinkTime">Analiz</label>
+        <select id="timeSelect" class="control-select" aria-label="Analiz süresi">
+          <option value="1" data-i18n="fast">Hızlı · 1 sn</option>
+          <option value="2" selected data-i18n="balanced">Dengeli · 2 sn</option>
+          <option value="5" data-i18n="strong">Güçlü · 5 sn</option>
+          <option value="10" data-i18n="deep">Derin · 10 sn</option>
+        </select>
+        <label class="language-picker" aria-label="Language">
+          <span class="language-symbol" aria-hidden="true">文</span>
+          <select id="languageSelect" class="language-select" aria-label="Language">
+            <option value="tr">Türkçe</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <button id="newGameButton" class="button button-primary" data-i18n="newGame">Yeni oyun</button>
+      </div>
+    </header>
+
+    <div id="engineBanner" class="engine-banner" hidden>
+      <span class="banner-icon" aria-hidden="true">!</span>
+      <span id="engineBannerText"></span>
+      <a href="https://stockfishchess.org/download/" target="_blank" rel="noreferrer" data-i18n="downloadStockfish">Stockfish indir</a>
+    </div>
+
+    <main class="main-layout">
+      <section class="board-column" aria-label="Chess board">
+        <div class="board-player player-top">
+          <div id="opponentAvatar" class="player-avatar opponent-avatar" aria-hidden="true">♟</div>
+          <div class="player-info">
+            <div id="opponentName" class="player-name">Stockfish</div>
+            <div id="opponentCaption" class="player-caption" data-i18n="engineOpponent">Motor analizi</div>
+          </div>
+          <div id="opponentCaptured" class="captured-pieces" aria-label="Captured pieces"></div>
+        </div>
+
+        <div class="board-and-eval">
+          <div class="evaluation-column" aria-label="Position evaluation">
+            <div class="evaluation-track">
+              <div id="evaluationFill" class="evaluation-fill"></div>
+            </div>
+            <div id="evaluationLabel" class="evaluation-label">—</div>
+          </div>
+          <div id="board" class="chessboard" role="grid" aria-label="Chess board"></div>
+        </div>
+
+        <div class="board-player player-bottom">
+          <div id="humanAvatar" class="player-avatar human-avatar" aria-hidden="true">♙</div>
+          <div class="player-info">
+            <div id="humanName" class="player-name" data-i18n="you">Sen</div>
+            <div id="humanCaption" class="player-caption" data-i18n="yourSide">Beyaz taşlar</div>
+          </div>
+          <div id="humanCaptured" class="captured-pieces" aria-label="Captured pieces"></div>
+        </div>
+
+        <div class="board-footer">
+          <div class="board-hint"><span class="hint-dot"></span><span id="boardHintText" data-i18n="boardHint">Taşa tıkla; yasal kareler gösterilsin.</span></div>
+          <button id="flipBoardButton" class="text-button" data-i18n="flipBoard">Tahtayı çevir</button>
+        </div>
+      </section>
+
+      <aside class="analysis-column">
+        <section class="turn-card card">
+          <div class="section-kicker"><span class="live-dot"></span><span data-i18n="gameStatus">OYUN DURUMU</span></div>
+          <h1 id="turnTitle" class="turn-title" data-i18n="loading">Yükleniyor…</h1>
+          <p id="turnDescription" class="turn-description" data-i18n="connecting">Motor ve tahta hazırlanıyor.</p>
+        </section>
+
+        <section class="suggestion-card card">
+          <div class="suggestion-topline">
+            <div class="section-kicker" data-i18n="bestMove">EN İYİ HAMLE</div>
+            <div id="engineBadge" class="engine-badge"><span class="engine-dot"></span><span data-i18n="stockfish">Stockfish</span></div>
+          </div>
+          <div class="best-move-row">
+            <div>
+              <div id="bestMoveFriendly" class="best-move">—</div>
+              <div id="bestMoveSan" class="best-move-san"></div>
+            </div>
+            <div id="bestScore" class="best-score">—</div>
+          </div>
+          <div class="analysis-detail">
+            <span id="depthDetail" data-i18n="analysisWaiting">Analiz sonucu burada görünür</span>
+            <span id="nodesDetail"></span>
+          </div>
+          <button id="playSuggestionButton" class="button button-primary play-suggestion" disabled>
+            <span aria-hidden="true">✓</span><span data-i18n="playedIt">Bu hamleyi oynadım</span>
+          </button>
+        </section>
+
+        <section class="variations-card card">
+          <div class="card-heading">
+            <div class="section-kicker" data-i18n="alternatives">ALTERNATİF DEVAMLAR</div>
+            <span class="small-muted" data-i18n="topLines">En iyi 3 çizgi</span>
+          </div>
+          <div id="variationsList" class="variations-list">
+            <div class="empty-line" data-i18n="noLines">Analiz bekleniyor…</div>
+          </div>
+        </section>
+
+        <section class="input-card card">
+          <div class="input-heading">
+            <div>
+              <div class="section-kicker" data-i18n="enterMove">HAMLE GİR</div>
+              <div id="inputPrompt" class="input-prompt" data-i18n="enterOpponent">Rakibin hamlesini yaz veya tahtadan seç.</div>
+            </div>
+            <div class="input-shortcut">↵</div>
+          </div>
+          <form id="moveForm" class="move-form" autocomplete="off">
+            <input id="moveInput" type="text" spellcheck="false" placeholder="Örn. kale h8 · a8 h8 · Nf3" aria-label="Move input">
+            <button id="submitMoveButton" class="button button-submit" type="submit" data-i18n="submitMove">Hamleyi işle</button>
+          </form>
+          <div class="input-examples">
+            <span class="example-label" data-i18n="examples">Örnekler</span>
+            <button class="example-chip" type="button" data-example-tr="kale h8'e" data-example-en="rook to h8">kale h8'e</button>
+            <button class="example-chip" type="button" data-example-tr="a8'den h8'e" data-example-en="a8 to h8">a8'den h8'e</button>
+            <button class="example-chip" type="button" data-example-tr="at f3'e" data-example-en="knight to f3">at f3'e</button>
+            <button class="example-chip" type="button" data-example-tr="kısa rok" data-example-en="short castle">kısa rok</button>
+          </div>
+          <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+        </section>
+
+        <section class="history-card card">
+          <div class="card-heading">
+            <div class="section-kicker" data-i18n="moveHistory">HAMLELER</div>
+            <div class="history-actions">
+              <button id="fenButton" class="text-button" data-i18n="fen">FEN</button>
+              <button id="pgnButton" class="text-button" data-i18n="copyPgn">PGN kopyala</button>
+              <button id="undoButton" class="icon-button" title="Undo" aria-label="Undo">↶</button>
+            </div>
+          </div>
+          <div id="moveHistory" class="move-history">
+            <div class="history-empty" data-i18n="noMoves">Henüz hamle yok.</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <span data-i18n="localEngine">Yerel Stockfish analizi</span>
+      <span class="footer-separator">·</span>
+      <span data-i18n="timeDisclaimer">Öneriler analiz süresi ve donanıma bağlıdır.</span>
+    </footer>
+  </div>
+
+  <dialog id="fenDialog" class="modal">
+    <form id="fenForm" method="dialog">
+      <div class="modal-heading">
+        <div><div class="section-kicker" data-i18n="loadPosition">KONUM YÜKLE</div><h2 data-i18n="pasteFen">FEN konumunu yapıştır</h2></div>
+        <button id="closeFenDialog" class="icon-button" type="button" aria-label="Close">×</button>
+      </div>
+      <textarea id="fenInput" rows="3" placeholder="rnbqkbnr/pppppppp/8/... w KQkq - 0 1"></textarea>
+      <div class="modal-actions">
+        <button id="cancelFenButton" class="button button-secondary" type="button" data-i18n="cancel">İptal</button>
+        <button class="button button-primary" type="submit" data-i18n="loadPositionButton">Konumu yükle</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
+
